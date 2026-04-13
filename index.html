@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passive Stack - Passive Income Models That Are Tested And Proven</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-dark-bg: #0a0a0a;
+            --color-dark-card: #1a1a1a;
+            --color-dark-secondary: #111111;
+            --color-emerald: #10b981;
+            --color-emerald-dark: #059669;
+            --color-amber: #f59e0b;
+            --color-text-primary: #ffffff;
+            --color-text-secondary: #a0aec0;
+            --color-text-tertiary: #718096;
+            --color-border: #2d3748;
+            --color-border-light: #4a5568;
+
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --size-xs: 8px;
+            --size-sm: 16px;
+            --size-md: 24px;
+            --size-lg: 32px;
+            --size-xl: 48px;
+            --size-2xl: 64px;
+            --size-3xl: 96px;
+            --size-4xl: 128px;
+            --size-5xl: 160px;
+
+            --radius-sharp: 2px;
+            --radius-card: 8px;
+            --radius-pill: 999px;
+
+            --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --duration-reveal: 600ms;
+            --duration-hover: 300ms;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-text-primary);
+            background: linear-gradient(135deg, var(--color-dark-bg) 0%, var(--color-dark-secondary) 100%);
+            background-attachment: fixed;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        /* Typography */
+        h1 {
+            font-family: var(--font-heading);
+            font-size: 56px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-family: var(--font-heading);
+            font-size: 40px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-family: var(--font-heading);
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            line-height: 1.3;
+        }
+
+        h4 {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .text-hero {
+            font-family: var(--font-heading);
+            font-size: clamp(56px, 8vw, 80px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .text-body {
+            font-size: 16px;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+        }
+
+        .text-small {
+            font-size: 14px;
+            color: var(--color-text-tertiary);
+            line-height: 1.6;
+        }
+
+        .text-caption {
+            font-size: 12px;
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .text-mono {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(45, 55, 72, 0);
+            z-index: 1000;
+            transition: all 300ms var(--ease);
+            padding: 0 var(--size-lg);
+        }
+
+        nav.scrolled {
+            background: rgba(10, 10, 10, 0.9);
+            border-bottom-color: var(--color-border);
+            backdrop-filter: blur(20px);
+        }
+
+        .nav-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--size-xl);
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 300ms var(--ease);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-emerald);
+        }
+
+        .nav-links a.active {
+            color: var(--color-emerald);
+        }
+
+        .nav-cta {
+            margin-left: var(--size-lg);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 6px;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--color-text-primary);
+            transition: all 300ms var(--ease);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius-pill);
+            font-size: 14px;
+            font-weight: 600;
+            font-family: var(--font-body);
+            text-decoration: none;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all var(--duration-hover) var(--ease);
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--color-emerald);
+            color: var(--color-dark-bg);
+            border-color: var(--color-emerald);
+        }
+
+        .btn-primary:hover {
+            background: var(--color-emerald-dark);
+            border-color: var(--color-emerald-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--color-emerald);
+            border-color: var(--color-emerald);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(16, 185, 129, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-text {
+            background: none;
+            color: var(--color-emerald);
+            border: none;
+            padding: 0;
+            font-weight: 600;
+        }
+
+        .btn-text:hover {
+            color: var(--color-amber);
+        }
+
+        /* Containers */
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 var(--size-lg);
+        }
+
+        section {
+            padding: var(--size-4xl) var(--size-lg);
+        }
+
+        /* Hero Grid Background */
+        .grid-bg {
+            position: relative;
+            background:
+                linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: grid-pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes grid-pulse {
+            0%, 100% { background-color: var(--color-dark-bg); }
+            50% { background-color: rgba(16, 185, 129, 0.01); }
+        }
+
+        /* Sections */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding-top: 72px;
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .hero-label {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-emerald);
+            margin-bottom: var(--size-lg);
+            display: block;
+        }
+
+        .hero-title {
+            font-size: clamp(48px, 10vw, 80px);
+            line-height: 1.15;
+            margin-bottom: var(--size-xl);
+            animation: fadeInUp 600ms var(--ease) 0ms both;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--size-3xl);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+            animation: fadeInUp 600ms var(--ease) 100ms both;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: var(--size-lg);
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 600ms var(--ease) 200ms both;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s ease-in-out infinite;
+            color: var(--color-emerald);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--size-lg);
+            padding: var(--size-2xl) var(--size-lg);
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+            background: rgba(16, 185, 129, 0.02);
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: var(--size-lg) 0;
+        }
+
+        .stat-number {
+            font-family: var(--font-heading);
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--color-emerald);
+            margin-bottom: var(--size-sm);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+
+        /* Section Header */
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--size-3xl);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: var(--color-emerald);
+        }
+
+        .section-title {
+            margin-bottom: var(--size-lg);
+        }
+
+        .section-description {
+            color: var(--color-text-secondary);
+            font-size: 16px;
+            line-height: 1.7;
+            margin-top: var(--size-lg);
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--size-2xl);
+        }
+
+        .card {
+            background: var(--color-dark-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-card);
+            padding: var(--size-2xl);
+            transition: all var(--duration-hover) var(--ease);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity var(--duration-hover) var(--ease);
+        }
+
+        .card:hover {
+            border-color: var(--color-emerald);
+            transform: translateY(-4px);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-icon {
+            font-size: 32px;
+            margin-bottom: var(--size-lg);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: var(--size-sm);
+        }
+
+        .card-description {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Grid Layouts */
+        .three-col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--size-2xl);
+            align-items: stretch;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--size-3xl);
+            align-items: center;
+        }
+
+        /* Project Cards */
+        .project-card {
+            background: var(--color-dark-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-card);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            transition: all var(--duration-hover) var(--ease);
+        }
+
+        .project-card:hover {
+            border-color: var(--color-emerald);
+            transform: translateY(-8px);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--color-text-tertiary);
+        }
+
+        .project-body {
+            padding: var(--size-2xl);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: var(--size-sm);
+            margin-bottom: var(--size-lg);
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            font-size: 11px;
+            font-family: var(--font-mono);
+            padding: 4px 12px;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--color-emerald);
+            border-radius: var(--radius-pill);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .badge.revenue {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--color-amber);
+        }
+
+        .project-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: var(--size-sm);
+            flex: 1;
+        }
+
+        .project-description {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--size-lg);
+            flex: 1;
+        }
+
+        .project-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-emerald);
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 300ms var(--ease);
+            width: fit-content;
+            cursor: pointer;
+        }
+
+        .project-link:hover {
+            gap: 12px;
+            color: var(--color-amber);
+        }
+
+        /* Story Section */
+        .story-text {
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--size-2xl);
+        }
+
+        .quote {
+            border-left: 3px solid var(--color-emerald);
+            padding-left: var(--size-lg);
+            font-size: 18px;
+            font-style: italic;
+            color: var(--color-text-primary);
+            margin: var(--size-2xl) 0;
+            font-weight: 500;
+        }
+
+        /* Testimonials */
+        .testimonial-card {
+            background: var(--color-dark-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-card);
+            padding: var(--size-2xl);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .testimonial-quote {
+            font-size: 15px;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--size-xl);
+            line-height: 1.8;
+            flex: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: var(--size-lg);
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-emerald), var(--color-amber));
+        }
+
+        .testimonial-info h4 {
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .testimonial-role {
+            font-size: 12px;
+            color: var(--color-text-tertiary);
+        }
+
+        /* Blog Grid */
+        .blog-card {
+            background: var(--color-dark-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-card);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            transition: all var(--duration-hover) var(--ease);
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            border-color: var(--color-emerald);
+            transform: translateY(-4px);
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(245, 158, 11, 0.08) 100%);
+        }
+
+        .blog-body {
+            padding: var(--size-lg);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-category {
+            font-size: 11px;
+            color: var(--color-emerald);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            margin-bottom: var(--size-sm);
+        }
+
+        .blog-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: var(--size-sm);
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: var(--size-lg);
+            font-size: 12px;
+            color: var(--color-text-tertiary);
+        }
+
+        /* Process Timeline */
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--size-2xl);
+            position: relative;
+        }
+
+        .process-step {
+            text-align: center;
+            position: relative;
+            padding: var(--size-lg);
+        }
+
+        .process-number {
+            font-family: var(--font-heading);
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--color-emerald);
+            margin-bottom: var(--size-lg);
+        }
+
+        .process-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: var(--size-sm);
+        }
+
+        .process-description {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Connector Icons Styles */
+        .connector-strip {
+            display: flex;
+            gap: var(--size-lg);
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: var(--size-2xl) var(--size-lg);
+            background: rgba(16, 185, 129, 0.02);
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .connector-strip-label {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            width: 100%;
+            text-align: center;
+            margin-bottom: var(--size-lg);
+        }
+
+        .connector-icons {
+            display: flex;
+            gap: var(--size-lg);
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .connector-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.4;
+            transition: opacity var(--duration-hover) var(--ease);
+            cursor: pointer;
+        }
+
+        .connector-icon:hover {
+            opacity: 1;
+        }
+
+        .connector-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .connector-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .connector-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: var(--size-2xl);
+            padding: var(--size-2xl) 0;
+        }
+
+        .connector-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--size-sm);
+            text-align: center;
+        }
+
+        .connector-item-icon {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.7;
+            transition: opacity var(--duration-hover) var(--ease);
+        }
+
+        .connector-item:hover .connector-item-icon {
+            opacity: 1;
+        }
+
+        .connector-item-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .connector-item-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .connector-item-name {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+
+        .card-connectors {
+            display: flex;
+            gap: var(--size-sm);
+            margin-top: var(--size-lg);
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .card-connector-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.6;
+            transition: opacity var(--duration-hover) var(--ease);
+        }
+
+        .card-connector-icon:hover {
+            opacity: 1;
+        }
+
+        .card-connector-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .card-connector-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Newsletter */
+        .newsletter-section {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-card);
+            padding: var(--size-3xl) var(--size-2xl);
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .newsletter-title {
+            font-size: 32px;
+            margin-bottom: var(--size-lg);
+        }
+
+        .newsletter-description {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--size-2xl);
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: var(--size-sm);
+            margin-bottom: var(--size-lg);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 16px;
+            background: var(--color-dark-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-pill);
+            color: var(--color-text-primary);
+            font-family: var(--font-body);
+            font-size: 14px;
+            transition: all 300ms var(--ease);
+        }
+
+        .newsletter-form input:focus {
+            outline: none;
+            border-color: var(--color-emerald);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .newsletter-form input::placeholder {
+            color: var(--color-text-tertiary);
+        }
+
+        .newsletter-count {
+            font-size: 12px;
+            color: var(--color-text-tertiary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--color-dark-bg);
+            border-top: 1px solid var(--color-border);
+            padding: var(--size-3xl) var(--size-lg);
+        }
+
+        .footer-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--size-2xl);
+            margin-bottom: var(--size-3xl);
+        }
+
+        .footer-section h4 {
+            margin-bottom: var(--size-lg);
+        }
+
+        .footer-section a {
+            display: block;
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            margin-bottom: var(--size-sm);
+            transition: color 300ms var(--ease);
+            cursor: pointer;
+        }
+
+        .footer-section a:hover {
+            color: var(--color-emerald);
+        }
+
+        .socials {
+            display: flex;
+            gap: var(--size-lg);
+            margin-top: var(--size-lg);
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--color-border);
+            border-radius: 50%;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            transition: all 300ms var(--ease);
+            cursor: pointer;
+        }
+
+        .social-link:hover {
+            border-color: var(--color-emerald);
+            color: var(--color-emerald);
+        }
+
+        .footer-divider {
+            max-width: 1440px;
+            margin: 0 auto;
+            border-top: 1px solid var(--color-border);
+            padding-top: var(--size-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--color-text-tertiary);
+        }
+
+        /* Page Container */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Content Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp var(--duration-reveal) var(--ease) forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                height: 64px;
+                padding: 0 var(--size-sm);
+            }
+
+            .nav-container {
+                position: relative;
+            }
+
+            .nav-links {
+                display: none;
+                position: fixed;
+                inset: 64px 0 0 0;
+                flex-direction: column;
+                gap: 0;
+                background: var(--color-dark-bg);
+                z-index: 999;
+                padding: var(--size-2xl) var(--size-lg);
+                max-height: calc(100vh - 64px);
+                overflow-y: auto;
+            }
+
+            .nav-links.mobile-open {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: var(--size-lg);
+                border-bottom: 1px solid var(--color-border);
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            h1 {
+                font-size: 40px;
+            }
+
+            h2 {
+                font-size: 28px;
+            }
+
+            h3 {
+                font-size: 20px;
+            }
+
+            .hero-title {
+                font-size: clamp(36px, 8vw, 56px);
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            section {
+                padding: var(--size-2xl) var(--size-lg);
+            }
+
+            .container {
+                padding: 0 var(--size-sm);
+            }
+
+            .three-col,
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-bar {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            h3 {
+                font-size: 18px;
+            }
+
+            .hero-title {
+                font-size: clamp(28px, 7vw, 48px);
+            }
+
+            .hero-subtitle {
+                font-size: 16px;
+            }
+
+            section {
+                padding: var(--size-xl) var(--size-sm);
+            }
+
+            .hero-ctas {
+                gap: var(--size-sm);
+            }
+
+            .btn {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+
+            .stats-bar {
+                grid-template-columns: 1fr;
+                gap: var(--size-lg);
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .newsletter-form input {
+                min-width: unset;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Data
+        const MODELS = [
+            { id: 1, name: 'RecruitDNA', description: 'AI-powered job board aggregation coupled with recruiter platform enablement.', tier: 'Advanced', setupCost: '$2,000', revenue: '$250-600/client/mo', maintenance: '8-10 hrs/week', difficulty: 5, connectors: ['Supabase', 'Indeed', 'Claude', 'Gmail', 'Stripe'] },
+            { id: 2, name: 'Sandbox', description: 'UGC creator marketplace connecting brands with authentic content creators.', tier: 'Mid-Tier', setupCost: '$500', revenue: '$5K/mo by month 6', maintenance: '6 hrs/week', difficulty: 3, connectors: ['WordPress', 'Stripe', 'Instagram', 'TikTok'] },
+            { id: 3, name: 'Passive Stack', description: 'Meta product. Membership site selling access to all validated income models.', tier: 'Advanced', setupCost: '$1,000', revenue: '$3K-8K/mo', maintenance: '5-7 hrs/week', difficulty: 4, connectors: ['WordPress', 'Supabase', 'Stripe', 'Notion', 'GitHub'] },
+            { id: 4, name: 'Lead Gen Automation', description: 'Automated B2B lead generation using AI outreach and data enrichment.', tier: 'Entry Level', setupCost: '$300', revenue: '$1K-3K/mo', maintenance: '4 hrs/week', difficulty: 2, connectors: ['Apollo', 'Hunter', 'Stripe', 'Gmail'] },
+            { id: 5, name: 'Content Monetization', description: 'Transform existing content into multiple revenue streams via syndication.', tier: 'Entry Level', setupCost: '$200', revenue: '$500-1.5K/mo', maintenance: '3 hrs/week', difficulty: 1, connectors: ['WordPress', 'Stripe', 'Notion'] },
+            { id: 6, name: 'API Arbitrage', description: 'Buy cheap API access, resell augmented data to SaaS platforms.', tier: 'Mid-Tier', setupCost: '$800', revenue: '$2K-5K/mo', maintenance: '5 hrs/week', difficulty: 3, connectors: ['ScrapingBee', 'Supabase', 'Stripe', 'GitHub'] }
+        ];
+
+        const BLOG_POSTS = [
+            { id: 1, title: 'Why I Chose Supabase Over Firebase for Passive Stack', excerpt: 'A technical deep-dive into database architecture decisions.', category: 'Technical', date: 'March 15, 2024', readTime: '8 min' },
+            { id: 2, title: 'The $49/mo SaaS Nobody\'s Building', excerpt: 'An untapped market opportunity hiding in plain sight.', category: 'Ideas', date: 'March 12, 2024', readTime: '6 min' },
+            { id: 3, title: 'How to Validate a Passive Income Idea in 48 Hours', excerpt: 'My exact framework for testing business ideas before investing.', category: 'Process', date: 'March 8, 2024', readTime: '10 min' }
+        ];
+
+        const TESTIMONIALS = [
+            { quote: 'Finally, someone willing to show real numbers instead of guru nonsense.', author: 'Sarah Chen', role: 'Founder, SaaS Startup' },
+            { quote: 'The playbooks are so detailed I could replicate them exactly.', author: 'Marcus Rodriguez', role: 'Product Manager' },
+            { quote: 'Real case studies from someone actually running these. Not theory.', author: 'Priya Patel', role: 'Engineer' }
+        ];
+
+        function Navigation({ currentPage, onNavClick, scrolled }) {
+            const [mobileOpen, setMobileOpen] = useState(false);
+
+            const handleNavClick = (page) => {
+                onNavClick(page);
+                setMobileOpen(false);
+            };
+
+            return (
+                <nav className={scrolled ? 'scrolled' : ''}>
+                    <div className="nav-container">
+                        <div className="nav-logo">PASSIVE STACK</div>
+                        <div className={`nav-links ${mobileOpen ? 'mobile-open' : ''}`}>
+                            <a className={currentPage === 'home' ? 'active' : ''} onClick={() => handleNavClick('home')}>Home</a>
+                            <a className={currentPage === 'about' ? 'active' : ''} onClick={() => handleNavClick('about')}>About</a>
+                            <a className={currentPage === 'models' ? 'active' : ''} onClick={() => handleNavClick('models')}>Models</a>
+                            <a className={currentPage === 'services' ? 'active' : ''} onClick={() => handleNavClick('services')}>Services</a>
+                            <a className={currentPage === 'blog' ? 'active' : ''} onClick={() => handleNavClick('blog')}>Blog</a>
+                            <a className={currentPage === 'contact' ? 'active' : ''} onClick={() => handleNavClick('contact')}>Contact</a>
+                            <div className="nav-cta">
+                                <button className="btn btn-primary" onClick={() => handleNavClick('services')}>Join Now</button>
+                            </div>
+                        </div>
+                        <div className="hamburger" onClick={() => setMobileOpen(!mobileOpen)}>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </nav>
+            );
+        }
+
+        function getConnectorIcon(name) {
+            const iconMap = {
+                'Supabase': <img src="https://cdn.simpleicons.org/supabase/3FCF8E" alt="Supabase" style={{width: '100%', height: '100%', objectFit: 'contain'}} />,
+                'Stripe': <img src="https://cdn.simpleicons.org/stripe/008CDD" alt="Stripe" style={{width: '100%', height: '100%', objectFit: 'contain'}} />,
+                'Claude': <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" opacity="0.2"/><text x="12" y="14" textAnchor="middle" fill="white" fontWeight="bold" fontFamily="monospace" fontSize="12">C</text></svg>,
+                'WordPress': <img src="https://cdn.simpleicons.org/wordpress/21759B" alt="WordPress" style={{width: '100%', height: '100%', objectFit: 'contain'}} />,
+                'Gmail': <img src="https://cdn.simpleicons.org/gmail/EA4335" alt="Gmail" style={{width: '100%', height: '100%', objectFit: 'contain'}} />,
+                'GitHub': <img src="https://cdn.simpleicons.org/github/FFFFFF" alt="GitHub" style={{width: '100%', height: '100%', objectFit: 'contain'}} />,
+                'Notion': <img src="https://cdn.simpleicons.org/notion/FFFFFF" alt="Notion" style={{width: '100%', height: '100%', objectFit: 'contain'}} />,
+                'Canva': <img src="https://cdn.simpleicons.org/canva/00C4CC" alt="Canva" style={{width: '100%', height: '100%', objectFit: 'contain'}} />,
+                'Slack': <img src="https://cdn.simpleicons.org/slack/4A154B" alt="Slack" style={{width: '100%', height: '100%', objectFit: 'contain'}} />,
+                'Instagram': <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram" style={{width: '100%', height: '100%', objectFit: 'contain'}} />,
+                'TikTok': <img src="https://cdn.simpleicons.org/tiktok/FFFFFF" alt="TikTok" style={{width: '100%', height: '100%', objectFit: 'contain'}} />,
+                'Google Calendar': <img src="https://cdn.simpleicons.org/googlecalendar/4285F4" alt="Google Calendar" style={{width: '100%', height: '100%', objectFit: 'contain'}} />,
+                'Indeed': <svg viewBox="0 0 24 24" fill="currentColor"><rect width="24" height="24" rx="2" opacity="0.2"/><text x="12" y="14" textAnchor="middle" fill="white" fontWeight="bold" fontFamily="monospace" fontSize="10">IN</text></svg>,
+                'ScrapingBee': <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" opacity="0.2"/><text x="12" y="14" textAnchor="middle" fill="white" fontWeight="bold" fontFamily="monospace" fontSize="10">SB</text></svg>,
+                'Apollo': <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" opacity="0.2"/><text x="12" y="14" textAnchor="middle" fill="white" fontWeight="bold" fontFamily="monospace" fontSize="9">AP</text></svg>,
+                'Hunter': <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" opacity="0.2"/><text x="12" y="14" textAnchor="middle" fill="white" fontWeight="bold" fontFamily="monospace" fontSize="9">HT</text></svg>,
+                'Vibe Prospecting': <svg viewBox="0 0 24 24" fill="currentColor"><rect width="24" height="24" rx="2" opacity="0.2"/><text x="12" y="14" textAnchor="middle" fill="white" fontWeight="bold" fontFamily="monospace" fontSize="9">VP</text></svg>,
+            };
+            return iconMap[name] || <div style={{fontSize: '10px', fontWeight: 'bold'}}>{name.charAt(0)}</div>;
+        }
+
+        function HomePage({ onNavClick }) {
+            const [scrolled, setScrolled] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            return (
+                <div className="page active">
+                    <Navigation currentPage="home" onNavClick={onNavClick} scrolled={scrolled} />
+
+                    <section className="hero grid-bg">
+                        <div className="hero-content">
+                            <span className="hero-label">Passive Stack</span>
+                            <h1 className="hero-title">Passive Income Models That Are Tested And Proven</h1>
+                            <p className="hero-subtitle">A curated library of validated passive income systems. Real numbers. Real playbooks. Built by someone who actually runs them.</p>
+                            <div className="hero-ctas">
+                                <button className="btn btn-primary" onClick={() => onNavClick('models')}>Explore Models →</button>
+                                <button className="btn btn-ghost" onClick={() => onNavClick('about')}>See How It Works</button>
+                            </div>
+                        </div>
+                        <div className="scroll-indicator">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </section>
+
+                    <div className="stats-bar">
+                        <div className="stat-item"><div className="stat-number">10+</div><div className="stat-label">Tested Models</div></div>
+                        <div className="stat-item"><div className="stat-number">$50K+</div><div className="stat-label">Monthly Revenue</div></div>
+                        <div className="stat-item"><div className="stat-number">3</div><div className="stat-label">Active Products</div></div>
+                        <div className="stat-item"><div className="stat-number">10 hrs</div><div className="stat-label">Maximum Weekly</div></div>
+                    </div>
+
+                    <div className="connector-strip">
+                        <div className="connector-strip-label">Powered by the tools you already use</div>
+                        <div className="connector-icons">
+                            <div className="connector-icon" title="Supabase"><img src="https://cdn.simpleicons.org/supabase/3FCF8E" alt="Supabase" /></div>
+                            <div className="connector-icon" title="Stripe"><img src="https://cdn.simpleicons.org/stripe/008CDD" alt="Stripe" /></div>
+                            <div className="connector-icon" title="Claude"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" opacity="0.2"/><text x="12" y="14" text-anchor="middle" fill="white" font-weight="bold" font-family="monospace" font-size="12">C</text></svg></div>
+                            <div className="connector-icon" title="WordPress"><img src="https://cdn.simpleicons.org/wordpress/21759B" alt="WordPress" /></div>
+                            <div className="connector-icon" title="Gmail"><img src="https://cdn.simpleicons.org/gmail/EA4335" alt="Gmail" /></div>
+                            <div className="connector-icon" title="GitHub"><img src="https://cdn.simpleicons.org/github/FFFFFF" alt="GitHub" /></div>
+                            <div className="connector-icon" title="Notion"><img src="https://cdn.simpleicons.org/notion/FFFFFF" alt="Notion" /></div>
+                            <div className="connector-icon" title="Canva"><img src="https://cdn.simpleicons.org/canva/00C4CC" alt="Canva" /></div>
+                            <div className="connector-icon" title="Slack"><img src="https://cdn.simpleicons.org/slack/4A154B" alt="Slack" /></div>
+                        </div>
+                    </div>
+
+                    <section>
+                        <div className="container">
+                            <div className="section-header">
+                                <h2 className="section-title">The Ecosystem</h2>
+                                <p className="section-description">A complete system for discovering, validating, and launching passive income streams.</p>
+                            </div>
+                            <div className="three-col">
+                                <div className="card"><div className="card-content"><div className="card-icon">💡</div><h4 className="card-title">Ideas Database</h4><p className="card-description">Curated passive income plays, categorized by setup cost, revenue potential, and maintenance hours.</p></div></div>
+                                <div className="card"><div className="card-content"><div className="card-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/><path d="M12 5v14m7-7h-14"/></svg></div><h4 className="card-title">Execution Frameworks</h4><p className="card-description">Step-by-step playbooks with exact tools, connectors, MCP servers, and automation tools.</p></div></div>
+                                <div className="card"><div className="card-content"><div className="card-icon">👥</div><h4 className="card-title">Community</h4><p className="card-description">Users submit systems, share workflows, and rate what actually works in practice.</p></div></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <div className="container">
+                            <div className="section-header">
+                                <h2 className="section-title">Validated Models</h2>
+                                <p className="section-description">Three of our most proven passive income systems.</p>
+                            </div>
+                            <div className="three-col">
+                                {MODELS.slice(0, 3).map((model) => (
+                                    <div key={model.id} className="project-card">
+                                        <div className="project-image">{model.name}</div>
+                                        <div className="project-body">
+                                            <div className="project-meta">
+                                                <span className="badge">{model.tier}</span>
+                                                <span className="badge revenue">{model.revenue}</span>
+                                            </div>
+                                            <h3 className="project-title">{model.name}</h3>
+                                            <p className="project-description">{model.description}</p>
+                                            <div className="card-connectors">
+                                                {model.connectors && model.connectors.map((connector, idx) => (
+                                                    <div key={idx} className="card-connector-icon" title={connector}>
+                                                        {getConnectorIcon(connector)}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <a className="project-link" onClick={() => onNavClick('project', model.id)}>View Playbook <span>→</span></a>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <div className="container">
+                            <div className="two-col">
+                                <div>
+                                    <h2>Built by someone who runs the plays</h2>
+                                    <p className="story-text">I run a lead generation and sales company that generates millions in annual revenue. Every passive income model documented here has been tested in production, with real revenue, in my own businesses.</p>
+                                    <p className="story-text">I validate. I document. I share. No theory. No guru nonsense. No Lamborghini videos.</p>
+                                    <div className="quote">"I'm willing to spend $1,000 on a revenue channel if it produces $5,000 in return."</div>
+                                    <button className="btn btn-text" onClick={() => onNavClick('about')}>Read the full story →</button>
+                                </div>
+                                <div style={{ background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%)', borderRadius: '8px', padding: '64px 32px', height: '100%', minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-tertiary)' }}>Author Photo Placeholder</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <div className="container">
+                            <div className="section-header">
+                                <h2 className="section-title">What Builders Say</h2>
+                            </div>
+                            <div className="three-col">
+                                {TESTIMONIALS.map((testimonial, idx) => (
+                                    <div key={idx} className="testimonial-card">
+                                        <p className="testimonial-quote">"{testimonial.quote}"</p>
+                                        <div className="testimonial-author">
+                                            <div className="testimonial-avatar"></div>
+                                            <div className="testimonial-info">
+                                                <h4>{testimonial.author}</h4>
+                                                <div className="testimonial-role">{testimonial.role}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <div className="container">
+                            <div className="section-header">
+                                <h2 className="section-title">Latest Insights</h2>
+                            </div>
+                            <div className="three-col">
+                                {BLOG_POSTS.map((post) => (
+                                    <div key={post.id} className="blog-card" onClick={() => onNavClick('blog-post', post.id)}>
+                                        <div className="blog-image"></div>
+                                        <div className="blog-body">
+                                            <span className="blog-category">{post.category}</span>
+                                            <h4 className="blog-title">{post.title}</h4>
+                                            <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', margin: 'var(--size-lg) 0', flex: 1 }}>{post.excerpt}</p>
+                                            <div className="blog-meta"><span>{post.date}</span><span>{post.readTime}</span></div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <div className="container">
+                            <div className="section-header">
+                                <h2 className="section-title">How We Work</h2>
+                                <p className="section-description">A systematic approach to discovering and validating passive income opportunities.</p>
+                            </div>
+                            <div className="process-steps">
+                                <div className="process-step"><div className="process-number">01</div><h4 className="process-title">Research</h4><p className="process-description">Identify market gaps and emerging opportunities in passive income space.</p></div>
+                                <div className="process-step"><div className="process-number">02</div><h4 className="process-title">Validate</h4><p className="process-description">Test ideas with real money. Prove the business model works in production.</p></div>
+                                <div className="process-step"><div className="process-number">03</div><h4 className="process-title">Document</h4><p className="process-description">Create detailed playbooks with exact steps, tools, costs, and timelines.</p></div>
+                                <div className="process-step"><div className="process-number">04</div><h4 className="process-title">Publish</h4><p className="process-description">Share frameworks with our community and gather feedback.</p></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <div className="container">
+                            <div className="newsletter-section">
+                                <h3 className="newsletter-title">Get the Signal</h3>
+                                <p className="newsletter-description">Weekly insights on building passive income systems. No noise.</p>
+                                <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
+                                    <input type="email" placeholder="Enter your email" required />
+                                    <button className="btn btn-primary">Subscribe</button>
+                                </form>
+                                <p className="newsletter-count">Join 0 builders receiving weekly insights</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section style={{ background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(245, 158, 11, 0.02) 100%)' }}>
+                        <div className="container" style={{ textAlign: 'center' }}>
+                            <h2 style={{ marginBottom: 'var(--size-lg)' }}>Ready to Build?</h2>
+                            <p style={{ fontSize: '18px', color: 'var(--color-text-secondary)', marginBottom: 'var(--size-2xl)', maxWidth: '600px', margin: '0 auto var(--size-2xl)', lineHeight: 1.7 }}>Pick a model. Follow the playbook. Start generating revenue.</p>
+                            <div className="hero-ctas">
+                                <button className="btn btn-primary" onClick={() => onNavClick('services')}>Join The Passive Stack</button>
+                                <button className="btn btn-ghost" onClick={() => onNavClick('models')}>Browse Models</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <Footer onNavClick={onNavClick} />
+                </div>
+            );
+        }
+
+        function ModelsPage({ onNavClick }) {
+            const [scrolled, setScrolled] = useState(false);
+            const [filter, setFilter] = useState('All');
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const filteredModels = filter === 'All' ? MODELS : MODELS.filter(m => m.tier === filter);
+
+            return (
+                <div className="page active">
+                    <Navigation currentPage="models" onNavClick={onNavClick} scrolled={scrolled} />
+                    <section className="hero" style={{ minHeight: '60vh', paddingTop: 'var(--size-3xl)' }}>
+                        <div className="hero-content">
+                            <h1 className="reveal">All Passive Income Models</h1>
+                            <p className="hero-subtitle reveal">Browse our complete library of tested and proven passive income systems.</p>
+                            <div style={{ display: 'flex', gap: 'var(--size-sm)', justifyContent: 'center', marginTop: 'var(--size-2xl)', flexWrap: 'wrap' }} className="reveal">
+                                {['All', 'Entry Level', 'Mid-Tier', 'Advanced'].map(tier => (
+                                    <button key={tier} className={`btn ${filter === tier ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setFilter(tier)}>{tier}</button>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                    <section style={{ paddingTop: 0 }}>
+                        <div className="container">
+                            <div className="three-col">
+                                {filteredModels.map((model) => (
+                                    <div key={model.id} className="project-card">
+                                        <div className="project-image">{model.name}</div>
+                                        <div className="project-body">
+                                            <div className="project-meta">
+                                                <span className="badge">{model.tier}</span>
+                                                <span className="badge revenue">{model.revenue}</span>
+                                            </div>
+                                            <h3 className="project-title">{model.name}</h3>
+                                            <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', marginBottom: 'var(--size-lg)', display: 'grid', gap: 'var(--size-sm)' }}>
+                                                <div><strong style={{ color: 'var(--color-text-primary)' }}>Setup:</strong> {model.setupCost}</div>
+                                                <div><strong style={{ color: 'var(--color-text-primary)' }}>Maintenance:</strong> {model.maintenance}</div>
+                                            </p>
+                                            <p className="project-description">{model.description}</p>
+                                            <a className="project-link" onClick={() => onNavClick('project', model.id)}>View Playbook <span>→</span></a>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                    <Footer onNavClick={onNavClick} />
+                </div>
+            );
+        }
+
+        function ProjectPage({ projectId, onNavClick }) {
+            const [scrolled, setScrolled] = useState(false);
+            const model = MODELS.find(m => m.id === projectId);
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            if (!model) return null;
+
+            return (
+                <div className="page active">
+                    <Navigation currentPage="project" onNavClick={onNavClick} scrolled={scrolled} />
+                    <section style={{ background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%)', paddingTop: 'var(--size-3xl)' }}>
+                        <div className="container">
+                            <button className="btn btn-text" onClick={() => onNavClick('models')} style={{ marginBottom: 'var(--size-xl)' }}>← Back to Models</button>
+                            <h1 style={{ marginBottom: 'var(--size-lg)' }}>{model.name}</h1>
+                            <div style={{ display: 'flex', gap: 'var(--size-lg)', marginBottom: 'var(--size-2xl)', flexWrap: 'wrap' }}>
+                                <span className="badge">{model.tier}</span>
+                                <span className="badge revenue">{model.revenue}</span>
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <div className="container">
+                            <div style={{ background: 'var(--color-dark-card)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-card)', padding: 'var(--size-2xl)', marginBottom: 'var(--size-3xl)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--size-2xl)' }}>
+                                <div><div style={{ fontSize: '12px', color: 'var(--color-emerald)', textTransform: 'uppercase', fontWeight: 600, letterSpacing: '0.05em', marginBottom: 'var(--size-sm)' }}>Setup Cost</div><div style={{ fontSize: '24px', fontWeight: 700, color: 'var(--color-text-primary)' }}>{model.setupCost}</div></div>
+                                <div><div style={{ fontSize: '12px', color: 'var(--color-emerald)', textTransform: 'uppercase', fontWeight: 600, letterSpacing: '0.05em', marginBottom: 'var(--size-sm)' }}>Monthly Revenue</div><div style={{ fontSize: '24px', fontWeight: 700, color: 'var(--color-text-primary)' }}>{model.revenue}</div></div>
+                                <div><div style={{ fontSize: '12px', color: 'var(--color-emerald)', textTransform: 'uppercase', fontWeight: 600, letterSpacing: '0.05em', marginBottom: 'var(--size-sm)' }}>Weekly Maintenance</div><div style={{ fontSize: '24px', fontWeight: 700, color: 'var(--color-text-primary)' }}>{model.maintenance}</div></div>
+                            </div>
+                            <div><h2>Overview</h2><p className="story-text">{model.description}</p><p className="story-text">This model has been tested in production and generates consistent revenue. The playbook includes step-by-step implementation guides, exact tools needed, cost breakdowns, and timelines to profitability.</p></div>
+                        </div>
+                    </section>
+                    <section><div className="container"><div><h2>Required Connectors</h2><div style={{ marginBottom: 'var(--size-3xl)' }}><div className="connector-grid">{model.connectors && model.connectors.map((connector, idx) => (<div key={idx} className="connector-item"><div className="connector-item-icon">{getConnectorIcon(connector)}</div><div className="connector-item-name">{connector}</div></div>))}</div></div></div></div></section>
+                    <section><div className="container"><div><h2>Tech Stack</h2><div style={{ background: 'var(--color-dark-card)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-card)', padding: 'var(--size-2xl)', marginBottom: 'var(--size-2xl)' }}><p style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--size-lg)' }}>Specific tools, platforms, and integrations required for implementation. Detailed in full playbook.</p></div></div></div></section>
+                    <section style={{ background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(245, 158, 11, 0.02) 100%)' }}>
+                        <div className="container">
+                            <div style={{ textAlign: 'center' }}><h2 style={{ marginBottom: 'var(--size-lg)' }}>Ready to Implement?</h2><p style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--size-2xl)', maxWidth: '600px', margin: '0 auto var(--size-2xl)' }}>Get the complete playbook with step-by-step implementation guides, exact costs, timelines, and community support.</p><button className="btn btn-primary" onClick={() => onNavClick('services')}>Get Full Playbook</button></div>
+                        </div>
+                    </section>
+                    <Footer onNavClick={onNavClick} />
+                </div>
+            );
+        }
+
+        function BlogPage({ onNavClick }) {
+            const [scrolled, setScrolled] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            return (
+                <div className="page active">
+                    <Navigation currentPage="blog" onNavClick={onNavClick} scrolled={scrolled} />
+                    <section className="hero" style={{ minHeight: '60vh', paddingTop: 'var(--size-3xl)' }}>
+                        <div className="hero-content">
+                            <h1 className="reveal">Insights</h1>
+                            <p className="hero-subtitle reveal">Deep dives into passive income, business automation, and technical strategies.</p>
+                        </div>
+                    </section>
+                    <section style={{ paddingTop: 0 }}>
+                        <div className="container">
+                            <div className="three-col">
+                                {BLOG_POSTS.map((post) => (
+                                    <div key={post.id} className="blog-card" onClick={() => onNavClick('blog-post', post.id)}>
+                                        <div className="blog-image"></div>
+                                        <div className="blog-body">
+                                            <span className="blog-category">{post.category}</span>
+                                            <h4 className="blog-title">{post.title}</h4>
+                                            <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', margin: 'var(--size-lg) 0', flex: 1 }}>{post.excerpt}</p>
+                                            <div className="blog-meta"><span>{post.date}</span><span>{post.readTime}</span></div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                    <Footer onNavClick={onNavClick} />
+                </div>
+            );
+        }
+
+        function ServicesPage({ onNavClick }) {
+            const [scrolled, setScrolled] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            return (
+                <div className="page active">
+                    <Navigation currentPage="services" onNavClick={onNavClick} scrolled={scrolled} />
+                    <section className="hero" style={{ minHeight: '60vh', paddingTop: 'var(--size-3xl)' }}>
+                        <div className="hero-content">
+                            <h1 className="reveal">Membership Plans</h1>
+                            <p className="hero-subtitle reveal">Choose the plan that fits your passive income journey.</p>
+                        </div>
+                    </section>
+                    <section style={{ paddingTop: 0 }}>
+                        <div className="container">
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--size-2xl)', maxWidth: '900px', margin: '0 auto' }}>
+                                <div className="card"><span className="badge">Monthly</span><h3 style={{ marginTop: 'var(--size-lg)' }}>Builder</h3><div style={{ fontSize: '48px', fontWeight: 700, color: 'var(--color-emerald)', marginBottom: 'var(--size-sm)' }}>$29</div><div style={{ fontSize: '13px', color: 'var(--color-text-tertiary)', marginBottom: 'var(--size-2xl)' }}>/month, billed monthly</div><ul style={{ listStyle: 'none', marginBottom: 'var(--size-2xl)', fontSize: '13px', color: 'var(--color-text-secondary)', display: 'grid', gap: 'var(--size-sm)' }}><li>✓ Access to all 10+ models</li><li>✓ Complete execution frameworks</li><li>✓ Monthly updates & new models</li><li>✓ Community access</li><li>✓ Email support</li></ul><button className="btn btn-primary" style={{ width: '100%' }}>Get Started</button></div>
+                                <div className="card" style={{ borderColor: 'var(--color-emerald)', transform: 'scale(1.05)' }}><span className="badge">Annual (Save 17%)</span><h3 style={{ marginTop: 'var(--size-lg)' }}>Builder Annual</h3><div style={{ fontSize: '48px', fontWeight: 700, color: 'var(--color-emerald)', marginBottom: 'var(--size-sm)' }}>$290</div><div style={{ fontSize: '13px', color: 'var(--color-text-tertiary)', marginBottom: 'var(--size-2xl)' }}>/year, billed annually</div><ul style={{ listStyle: 'none', marginBottom: 'var(--size-2xl)', fontSize: '13px', color: 'var(--color-text-secondary)', display: 'grid', gap: 'var(--size-sm)' }}><li>✓ Access to all 10+ models</li><li>✓ Complete execution frameworks</li><li>✓ Monthly updates & new models</li><li>✓ Community access</li><li>✓ Email + Discord support</li><li>✓ Quarterly strategy calls</li></ul><button className="btn btn-primary" style={{ width: '100%' }}>Get Started</button></div>
+                            </div>
+                        </div>
+                    </section>
+                    <section style={{ background: 'rgba(16, 185, 129, 0.02)', borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)' }}>
+                        <div className="container">
+                            <div style={{ textAlign: 'center', marginBottom: 'var(--size-3xl)' }}>
+                                <h2 style={{ marginBottom: 'var(--size-lg)' }}>Connector Ecosystem</h2>
+                                <p style={{ color: 'var(--color-text-secondary)', maxWidth: '600px', margin: '0 auto' }}>Passive Stack integrates with the tools you already use. Seamlessly connect to automate your passive income operations.</p>
+                            </div>
+                            <div className="connector-grid" style={{ maxWidth: '100%' }}>
+                                {['Supabase', 'Stripe', 'Claude', 'WordPress', 'Gmail', 'GitHub', 'Notion', 'Canva', 'Slack', 'Indeed', 'Google Calendar', 'Instagram', 'TikTok', 'ScrapingBee', 'Apollo', 'Hunter', 'Vibe Prospecting'].map((connector, idx) => (
+                                    <div key={idx} className="connector-item">
+                                        <div className="connector-item-icon">{getConnectorIcon(connector)}</div>
+                                        <div className="connector-item-name">{connector}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                    <Footer onNavClick={onNavClick} />
+                </div>
+            );
+        }
+
+        function ContactPage({ onNavClick }) {
+            const [scrolled, setScrolled] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            return (
+                <div className="page active">
+                    <Navigation currentPage="contact" onNavClick={onNavClick} scrolled={scrolled} />
+                    <section className="hero" style={{ minHeight: '60vh', paddingTop: 'var(--size-3xl)' }}>
+                        <div className="hero-content">
+                            <h1 className="reveal">Let's Talk</h1>
+                            <p className="hero-subtitle reveal">Have questions about a model? Want to partner? Drop us a line.</p>
+                        </div>
+                    </section>
+                    <section style={{ paddingTop: 0 }}>
+                        <div className="container">
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 'var(--size-3xl)' }}>
+                                <form style={{ display: 'flex', flexDirection: 'column', gap: 'var(--size-lg)' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--size-sm)' }}><label>Name</label><input type="text" style={{ background: 'var(--color-dark-card)', border: '1px solid var(--color-border)', borderRadius: '8px', padding: '12px 16px', color: 'var(--color-text-primary)', fontFamily: 'var(--font-body)', fontSize: '14px', minHeight: '44px' }} required /></div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--size-sm)' }}><label>Email</label><input type="email" style={{ background: 'var(--color-dark-card)', border: '1px solid var(--color-border)', borderRadius: '8px', padding: '12px 16px', color: 'var(--color-text-primary)', fontFamily: 'var(--font-body)', fontSize: '14px', minHeight: '44px' }} required /></div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--size-sm)' }}><label>Subject</label><select style={{ background: 'var(--color-dark-card)', border: '1px solid var(--color-border)', borderRadius: '8px', padding: '12px 16px', color: 'var(--color-text-primary)', fontFamily: 'var(--font-body)', fontSize: '14px', minHeight: '44px' }} required><option value="">Select a subject</option><option>Question about a model</option><option>Partnership inquiry</option><option>Feedback</option><option>Other</option></select></div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--size-sm)' }}><label>Message</label><textarea style={{ background: 'var(--color-dark-card)', border: '1px solid var(--color-border)', borderRadius: '8px', padding: '12px 16px', color: 'var(--color-text-primary)', fontFamily: 'var(--font-body)', fontSize: '14px', minHeight: '180px' }} required></textarea></div>
+                                    <button type="submit" className="btn btn-primary">Send Message</button>
+                                </form>
+                                <div className="card"><h3>Get in Touch</h3><div style={{ marginTop: 'var(--size-2xl)' }}><div style={{ fontSize: '12px', color: 'var(--color-emerald)', textTransform: 'uppercase', fontWeight: 600, letterSpacing: '0.05em', marginBottom: 'var(--size-sm)' }}>Email</div><div style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>hello@passivestack.com</div></div></div>
+                            </div>
+                        </div>
+                    </section>
+                    <Footer onNavClick={onNavClick} />
+                </div>
+            );
+        }
+
+        function AboutPage({ onNavClick }) {
+            const [scrolled, setScrolled] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            return (
+                <div className="page active">
+                    <Navigation currentPage="about" onNavClick={onNavClick} scrolled={scrolled} />
+                    <section className="hero" style={{ paddingTop: 'var(--size-3xl)' }}>
+                        <div className="hero-content" style={{ maxWidth: '700px' }}>
+                            <h1>The Philosophy</h1>
+                            <p className="hero-subtitle">No theory. No guru nonsense. Just real systems that generate real revenue.</p>
+                        </div>
+                    </section>
+                    <section>
+                        <div className="container">
+                            <div className="two-col">
+                                <div><h2>The Story</h2><p className="story-text">I run a lead generation and sales company. It generates millions in annual revenue. But here's the thing: I wanted passive income.</p><p className="story-text">I tested dozens of ideas. Some failed spectacularly. Some generated $500/month. A few generated $5K+ monthly on autopilot.</p><p className="story-text">The difference wasn't luck. It was systematic validation. Real numbers. Real playbooks. Actual revenue.</p><p className="story-text">That's what Passive Stack is: the documented proof that these models work. For you.</p></div>
+                                <div style={{ background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%)', borderRadius: '8px', padding: '64px 32px', height: '100%', minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-tertiary)' }}>Timeline / History</div>
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <div className="container">
+                            <div className="section-header">
+                                <h2 className="section-title">Core Values</h2>
+                            </div>
+                            <div className="three-col">
+                                <div className="card"><div className="card-content"><h4 className="card-title">Signal Over Noise</h4><p className="card-description">Cut through the BS. Real numbers. Real revenue. No fake success stories.</p></div></div>
+                                <div className="card"><div className="card-content"><h4 className="card-title">Walk the Walk</h4><p className="card-description">Every model here is live in production. I run them. They generate revenue.</p></div></div>
+                                <div className="card"><div className="card-content"><h4 className="card-title">Low Resistance High Yield</h4><p className="card-description">Maximum leverage on your time. Each model targets 10 hours/week maximum maintenance.</p></div></div>
+                            </div>
+                        </div>
+                    </section>
+                    <Footer onNavClick={onNavClick} />
+                </div>
+            );
+        }
+
+        function BlogPostPage({ postId, onNavClick }) {
+            const [scrolled, setScrolled] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            return (
+                <div className="page active">
+                    <Navigation currentPage="blog" onNavClick={onNavClick} scrolled={scrolled} />
+                    <section style={{ paddingTop: 'calc(72px + var(--size-3xl))' }}>
+                        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 var(--size-lg)' }}>
+                            <button className="btn btn-text" onClick={() => onNavClick('blog')} style={{ marginBottom: 'var(--size-xl)' }}>← Back to Articles</button>
+                            <h1 style={{ marginBottom: 'var(--size-lg)', textAlign: 'center' }}>Sample Article Title</h1>
+                            <p style={{ textAlign: 'center', color: 'var(--color-text-secondary)', marginBottom: 'var(--size-2xl)' }}>March 15, 2024 • 8 min read</p>
+                            <div style={{ width: '100%', height: '400px', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%)', borderRadius: '8px', marginBottom: 'var(--size-3xl)' }}></div>
+                            <article style={{ fontSize: '16px', lineHeight: 1.8, color: 'var(--color-text-secondary)' }}>
+                                <h2 style={{ color: 'var(--color-text-primary)', marginTop: 'var(--size-2xl)', marginBottom: 'var(--size-lg)' }}>Introduction</h2>
+                                <p style={{ marginBottom: 'var(--size-xl)' }}>This is a sample article from the Passive Stack blog. The full content, including detailed technical insights, case studies, and actionable frameworks, would be displayed here in the production version.</p>
+                                <h2 style={{ color: 'var(--color-text-primary)', marginTop: 'var(--size-2xl)', marginBottom: 'var(--size-lg)' }}>Key Insights</h2>
+                                <p style={{ marginBottom: 'var(--size-xl)' }}>The article would contain multiple sections with deep dives into the topic, including code examples, performance metrics, and real-world applications from running the systems in production.</p>
+                                <h2 style={{ color: 'var(--color-text-primary)', marginTop: 'var(--size-2xl)', marginBottom: 'var(--size-lg)' }}>Conclusion</h2>
+                                <p>Summary of key takeaways and next steps for readers interested in implementing similar strategies in their own businesses.</p>
+                            </article>
+                        </div>
+                    </section>
+                    <Footer onNavClick={onNavClick} />
+                </div>
+            );
+        }
+
+        function Footer({ onNavClick }) {
+            return (
+                <footer>
+                    <div className="footer-content">
+                        <div className="footer-section">
+                            <h4>Passive Stack</h4>
+                            <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', marginBottom: 'var(--size-lg)', lineHeight: 1.6 }}>Passive income models that are tested and proven.</p>
+                            <div className="socials">
+                                <a href="#" className="social-link">X</a>
+                                <a href="#" className="social-link">in</a>
+                                <a href="#" className="social-link">D</a>
+                            </div>
+                        </div>
+                        <div className="footer-section">
+                            <h4>Navigation</h4>
+                            <a onClick={() => onNavClick('home')}>Home</a>
+                            <a onClick={() => onNavClick('about')}>About</a>
+                            <a onClick={() => onNavClick('models')}>Models</a>
+                            <a onClick={() => onNavClick('services')}>Services</a>
+                            <a onClick={() => onNavClick('blog')}>Blog</a>
+                            <a onClick={() => onNavClick('contact')}>Contact</a>
+                        </div>
+                        <div className="footer-section">
+                            <h4>Resources</h4>
+                            <a href="#">Documentation</a>
+                            <a href="#">Community</a>
+                            <a href="#">Support</a>
+                        </div>
+                        <div className="footer-section">
+                            <h4>Legal</h4>
+                            <a href="#">Terms of Service</a>
+                            <a href="#">Privacy Policy</a>
+                            <a href="#">Cookie Policy</a>
+                        </div>
+                    </div>
+                    <div className="footer-divider">
+                        <span>&copy; 2024 Passive Stack. All rights reserved.</span>
+                        <span>Made with care for builders.</span>
+                    </div>
+                </footer>
+            );
+        }
+
+        function App() {
+            const [currentPage, setCurrentPage] = useState('home');
+            const [projectId, setProjectId] = useState(null);
+            const [postId, setPostId] = useState(null);
+
+            const handleNavigation = (page, id) => {
+                setCurrentPage(page);
+                if (id) {
+                    if (page === 'project') setProjectId(id);
+                    else if (page === 'blog-post') setPostId(id);
+                }
+                window.scrollTo(0, 0);
+            };
+
+            return (
+                <>
+                    {currentPage === 'home' && <HomePage onNavClick={handleNavigation} />}
+                    {currentPage === 'about' && <AboutPage onNavClick={handleNavigation} />}
+                    {currentPage === 'models' && <ModelsPage onNavClick={handleNavigation} />}
+                    {currentPage === 'project' && <ProjectPage projectId={projectId} onNavClick={handleNavigation} />}
+                    {currentPage === 'services' && <ServicesPage onNavClick={handleNavigation} />}
+                    {currentPage === 'blog' && <BlogPage onNavClick={handleNavigation} />}
+                    {currentPage === 'blog-post' && <BlogPostPage postId={postId} onNavClick={handleNavigation} />}
+                    {currentPage === 'contact' && <ContactPage onNavClick={handleNavigation} />}
+                </>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
