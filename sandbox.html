@@ -1,0 +1,2596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandbox — Connecting Companies and Creators</title>
+
+    <!-- Google Fonts Fallbacks -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Fontshare Fonts (Primary) -->
+    <link rel="preconnect" href="https://api.fontshare.com/">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Typography System */
+        html {
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            html {
+                font-size: 14px;
+            }
+        }
+
+        body {
+            font-family: 'Satoshi', 'DM Sans', sans-serif;
+            background-color: #FAFAFA;
+            color: #111111;
+            line-height: 1.6;
+            letter-spacing: 0.3px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Clash Display', 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        h1 { font-size: 4rem; }
+        h2 { font-size: 3rem; }
+        h3 { font-size: 2rem; }
+        h4 { font-size: 1.5rem; }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.05em;
+        }
+
+        .hero-text {
+            font-size: 5.5rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 1.75rem; }
+            h3 { font-size: 1.5rem; }
+            .hero-text { font-size: 3rem; }
+        }
+
+        /* Spacing */
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(250, 250, 250, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 2px solid #111111;
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .logo {
+            font-family: 'Clash Display', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            text-decoration: none;
+            color: #111111;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #111111;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .nav-links a:hover {
+            color: #FF6B35;
+        }
+
+        .nav-auth {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            border: 2px solid #111111;
+            background: transparent;
+            cursor: pointer;
+            letter-spacing: 0.05em;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .nav-btn:hover {
+            background: #111111;
+            color: #FAFAFA;
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #111111;
+            margin: 6px 0;
+            transition: 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .nav-auth {
+                display: none;
+            }
+            .hamburger {
+                display: block;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+            background: linear-gradient(135deg, #FAFAFA 0%, #f5f5f5 100%);
+        }
+
+        .hero-blob {
+            position: absolute;
+            border-radius: 45% 55% 60% 40% / 55% 45% 55% 60%;
+            background: linear-gradient(135deg, #FF6B35 0%, #8B5CF6 50%, #3B82F6 100%);
+            width: 400px;
+            height: 400px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.15;
+            animation: blob 15s infinite;
+            z-index: 1;
+        }
+
+        @keyframes blob {
+            0%, 100% { border-radius: 45% 55% 60% 40% / 55% 45% 55% 60%; }
+            50% { border-radius: 40% 60% 50% 50% / 50% 50% 60% 40%; }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: 6rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: 0.1em;
+            line-height: 1;
+        }
+
+        .hero-tagline {
+            font-size: 1.25rem;
+            color: #666666;
+            margin-bottom: 3rem;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.05em;
+        }
+
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #111111;
+            background: transparent;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            transform: rotate(-1deg);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .badge:nth-child(2) {
+            transform: rotate(1deg);
+            border-color: #FF6B35;
+        }
+
+        .badge:nth-child(3) {
+            transform: rotate(-0.5deg);
+            border-color: #8B5CF6;
+        }
+
+        .badge:hover {
+            transform: rotate(0deg) scale(1.05);
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 3px solid;
+            cursor: pointer;
+            letter-spacing: 0.05em;
+            font-family: 'Clash Display', sans-serif;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #FF6B35;
+            border-color: #FF6B35;
+            color: #FAFAFA;
+        }
+
+        .btn-primary:hover {
+            background: #FAFAFA;
+            color: #FF6B35;
+        }
+
+        .btn-secondary {
+            background: #8B5CF6;
+            border-color: #8B5CF6;
+            color: #FAFAFA;
+        }
+
+        .btn-secondary:hover {
+            background: #FAFAFA;
+            color: #8B5CF6;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border-color: #111111;
+            color: #111111;
+        }
+
+        .btn-outline:hover {
+            background: #111111;
+            color: #FAFAFA;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            z-index: 2;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: #1A1A1A;
+            color: #FAFAFA;
+            padding: 3rem 2rem;
+            border-top: 3px solid #FF6B35;
+            border-bottom: 3px solid #8B5CF6;
+        }
+
+        .stats-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat {
+            border: 2px solid #FF6B35;
+            padding: 1.5rem;
+        }
+
+        .stat:nth-child(2) { border-color: #8B5CF6; }
+        .stat:nth-child(3) { border-color: #3B82F6; }
+        .stat:nth-child(4) { border-color: #EF4444; }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #AAAAAA;
+        }
+
+        /* Sections */
+        section {
+            padding: 5rem 2rem;
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 3rem 1rem;
+            }
+        }
+
+        .section-title {
+            margin-bottom: 3rem;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 2.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .section-title-line {
+            display: inline-block;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #FF6B35;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            background: #FAFAFA;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .column-title {
+            font-size: 1.75rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .column-title-orange::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #FF6B35;
+        }
+
+        .column-title-purple::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #8B5CF6;
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 2rem;
+            padding: 1.5rem;
+            border: 2px solid #111111;
+            background: #FAFAFA;
+        }
+
+        .step:nth-child(odd) {
+            background: #f5f5f5;
+        }
+
+        .step-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            min-width: 40px;
+            color: #FF6B35;
+        }
+
+        .step:nth-child(even) .step-number {
+            color: #8B5CF6;
+        }
+
+        .step-content h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content p {
+            color: #666666;
+            font-size: 0.9rem;
+        }
+
+        /* Creator Grid */
+        .creators-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 1024px) {
+            .creators-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .creators-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .creator-card {
+            border: 3px solid #111111;
+            padding: 2rem;
+            background: #FAFAFA;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+        }
+
+        .creator-card:hover {
+            transform: rotate(-1deg) translateY(-5px);
+            border-color: #FF6B35;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .creator-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF6B35 0%, #8B5CF6 100%);
+            margin-bottom: 1rem;
+            border: 2px solid #111111;
+        }
+
+        .creator-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .creator-niche {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .niche-tag {
+            padding: 0.35rem 0.75rem;
+            border: 2px solid #111111;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .niche-tag:hover {
+            background: #FF6B35;
+            color: #FAFAFA;
+            border-color: #FF6B35;
+        }
+
+        .creator-stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 1.5rem 0;
+            padding: 1rem 0;
+            border-top: 2px solid #f0f0f0;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .creator-stat {
+            text-align: center;
+        }
+
+        .creator-stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .creator-stat-label {
+            font-size: 0.75rem;
+            color: #666666;
+            text-transform: uppercase;
+        }
+
+        .creator-tier {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: #FF6B35;
+            color: #FAFAFA;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .creator-tier.rising {
+            background: #3B82F6;
+        }
+
+        .creator-tier.established {
+            background: #8B5CF6;
+        }
+
+        .creator-tier.pro {
+            background: #EF4444;
+        }
+
+        .creator-tier.elite {
+            background: #111111;
+            color: #FAFAFA;
+        }
+
+        .creator-content-types {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .content-type {
+            padding: 0.3rem 0.6rem;
+            background: #f0f0f0;
+            font-size: 0.7rem;
+            border: 1px solid #ddd;
+            text-transform: uppercase;
+        }
+
+        .creator-rate {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 1rem 0;
+            color: #FF6B35;
+        }
+
+        .creator-cta {
+            display: block;
+            text-align: right;
+            text-decoration: none;
+            color: #111111;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .creator-cta:hover {
+            color: #FF6B35;
+            transform: translateX(5px);
+        }
+
+        /* For Brands Section */
+        .brands-section {
+            background: #f5f5f5;
+        }
+
+        .brands-highlight {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .brands-highlight {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .brands-text h3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .brands-text p {
+            color: #666666;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .competitor-comparison {
+            background: #FAFAFA;
+            border: 3px solid #111111;
+            padding: 2rem;
+            margin: 2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .competitor-comparison h4 {
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .comparison-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-item:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-item.sandbox {
+            background: #FFF3E0;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: 2px solid #FF6B35;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            background: #FAFAFA;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 1024px) {
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .testimonial-card {
+            border: 3px solid #111111;
+            padding: 2rem;
+            background: #fff;
+            position: relative;
+            transform: rotate(-1deg);
+        }
+
+        .testimonial-card:nth-child(even) {
+            transform: rotate(1deg);
+        }
+
+        .testimonial-quote {
+            font-size: 3rem;
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            opacity: 0.2;
+            font-family: Georgia, serif;
+        }
+
+        .testimonial-text {
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .testimonial-role {
+            font-size: 0.85rem;
+            color: #666666;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Pricing */
+        .pricing {
+            background: #f5f5f5;
+        }
+
+        .pricing-preview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin: 3rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .pricing-preview {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pricing-block {
+            border: 3px solid #111111;
+            padding: 3rem;
+            background: #FAFAFA;
+        }
+
+        .pricing-block:nth-child(1) {
+            border-color: #FF6B35;
+        }
+
+        .pricing-block:nth-child(2) {
+            border-color: #8B5CF6;
+        }
+
+        .pricing-block h3 {
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .pricing-block p {
+            color: #666666;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        /* Blog Section */
+        .blog {
+            background: #FAFAFA;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 1024px) {
+            .blog-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .blog-card {
+            border: 3px solid #111111;
+            padding: 2rem;
+            background: #fff;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            transform: rotate(-1deg) translateY(-5px);
+            border-color: #FF6B35;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .blog-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #FF6B35;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .blog-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .blog-excerpt {
+            color: #666666;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .blog-category {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            background: #f0f0f0;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            border: 1px solid #ddd;
+        }
+
+        /* Newsletter */
+        .newsletter {
+            background: linear-gradient(135deg, #FF6B35 0%, #8B5CF6 100%);
+            color: #FAFAFA;
+            padding: 5rem 2rem;
+        }
+
+        .newsletter-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .newsletter h2 {
+            color: #FAFAFA;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .newsletter p {
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 2rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 0;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 1rem;
+            border: 3px solid #FAFAFA;
+            font-family: 'Satoshi', sans-serif;
+            font-size: 1rem;
+            background: transparent;
+            color: #FAFAFA;
+        }
+
+        .newsletter-form input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .newsletter-form button {
+            padding: 1rem 2rem;
+            background: #FAFAFA;
+            color: #FF6B35;
+            border: 3px solid #FAFAFA;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-family: 'Clash Display', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .newsletter-form button:hover {
+            background: transparent;
+            color: #FAFAFA;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: #1A1A1A;
+            color: #FAFAFA;
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            color: #FAFAFA;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            background: #1A1A1A;
+            color: #FAFAFA;
+            padding: 3rem 2rem;
+            border-top: 3px solid #FF6B35;
+        }
+
+        .footer-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer-column h4 {
+            color: #FAFAFA;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-column a {
+            color: #AAAAAA;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: #FF6B35;
+        }
+
+        .footer-badge {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #FF6B35;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .footer-bottom {
+            border-top: 2px solid #333333;
+            padding-top: 2rem;
+            text-align: center;
+            color: #888888;
+            font-size: 0.85rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .stagger-in {
+            opacity: 0;
+            animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        /* Specific Page Styles */
+        .about-section {
+            background: #FAFAFA;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 3rem auto;
+            font-size: 1.1rem;
+            line-height: 1.9;
+        }
+
+        .about-content h3 {
+            margin: 2rem 0 1rem 0;
+            text-transform: uppercase;
+        }
+
+        .about-content p {
+            color: #555555;
+            margin-bottom: 1.5rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .team-member {
+            text-align: center;
+            padding: 2rem;
+            border: 2px solid #111111;
+        }
+
+        .team-member-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF6B35 0%, #8B5CF6 100%);
+            margin: 0 auto 1rem;
+        }
+
+        .team-member h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .team-member p {
+            color: #666666;
+            font-size: 0.9rem;
+        }
+
+        /* Single Creator Page */
+        .profile-header {
+            background: linear-gradient(135deg, #FF6B35 0%, #8B5CF6 100%);
+            color: #FAFAFA;
+            padding: 3rem 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .profile-header-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .profile-header-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .profile-avatar-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            border: 3px solid #FAFAFA;
+        }
+
+        .profile-info h1 {
+            color: #FAFAFA;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-info p {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .profile-stats-large {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .profile-stat-large {
+            text-align: center;
+        }
+
+        .profile-stat-large-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .profile-stat-large-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Contact Form */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1000px;
+            margin: 3rem auto;
+        }
+
+        @media (max-width: 768px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .contact-form {
+            padding: 2rem;
+            border: 3px solid #111111;
+        }
+
+        .contact-info {
+            padding: 2rem;
+            border: 3px solid #FF6B35;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #111111;
+            font-family: 'Satoshi', sans-serif;
+            font-size: 1rem;
+            background: #FAFAFA;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-toggle {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #111111;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .toggle-btn.active {
+            background: #FF6B35;
+            color: #FAFAFA;
+            border-color: #FF6B35;
+        }
+
+        .toggle-btn.active.brand {
+            background: #8B5CF6;
+            border-color: #8B5CF6;
+        }
+
+        /* 404 Page */
+        .error-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1A1A1A 0%, #333333 100%);
+            color: #FAFAFA;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .error-content h1 {
+            color: #FF6B35;
+            margin-bottom: 1rem;
+            font-size: 5rem;
+        }
+
+        .error-content p {
+            color: #AAAAAA;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .glitch {
+            position: relative;
+            display: inline-block;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;;
+        }
+
+        .glitch::before {
+            animation: glitch-1 0.3s infinite;
+            color: #FF6B35;
+            z-index: -1;
+        }
+
+        .glitch::after {
+            animation: glitch-2 0.3s infinite;
+            color: #8B5CF6;
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0% { clip-path: inset(40% 0 61% 0); }
+            20% { clip-path: inset(92% 0 1% 0); }
+            40% { clip-path: inset(43% 0 1% 0); }
+            60% { clip-path: inset(25% 0 58% 0); }
+            80% { clip-path: inset(54% 0 7% 0); }
+            100% { clip-path: inset(58% 0 43% 0); }
+        }
+
+        @keyframes glitch-2 {
+            0% { clip-path: inset(27% 0 58% 0); }
+            20% { clip-path: inset(1% 0 58% 0); }
+            40% { clip-path: inset(44% 0 7% 0); }
+            60% { clip-path: inset(14% 0 61% 0); }
+            80% { clip-path: inset(44% 0 2% 0); }
+            100% { clip-path: inset(11% 0 19% 0); }
+        }
+
+        /* Blog Post */
+        .article-content {
+            max-width: 800px;
+            margin: 3rem auto;
+            line-height: 1.9;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .article-meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-meta-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #FF6B35;
+            margin-bottom: 0.25rem;
+        }
+
+        .article-meta-value {
+            font-weight: 600;
+        }
+
+        .article-content h2 {
+            margin: 2rem 0 1rem 0;
+        }
+
+        .article-content h3 {
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        .article-content p {
+            margin-bottom: 1rem;
+            color: #555555;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Pricing Table */
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 3rem 0;
+            border: 3px solid #111111;
+        }
+
+        .pricing-table th,
+        .pricing-table td {
+            padding: 1rem;
+            text-align: left;
+            border: 2px solid #f0f0f0;
+        }
+
+        .pricing-table th {
+            background: #1A1A1A;
+            color: #FAFAFA;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .pricing-table tr:nth-child(even) {
+            background: #f5f5f5;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .nav-container {
+                padding: 0 0.5rem;
+            }
+
+            .logo {
+                font-size: 1.25rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            section {
+                padding: 2rem 1rem;
+            }
+        }
+
+        /* Opacity for fade-in on scroll */
+        .fade-in-view {
+            opacity: 0;
+        }
+
+        .fade-in-view.visible {
+            animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- React and Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Navigation Component
+        function Navigation({ currentPage, setCurrentPage }) {
+            const [menuOpen, setMenuOpen] = useState(false);
+
+            const pages = [
+                { id: 'home', label: 'Home' },
+                { id: 'creators', label: 'Creators' },
+                { id: 'brands', label: 'For Brands' },
+                { id: 'pricing', label: 'Pricing' },
+                { id: 'blog', label: 'Blog' },
+                { id: 'contact', label: 'Contact' },
+            ];
+
+            const handleNavigate = (pageId) => {
+                setCurrentPage(pageId);
+                setMenuOpen(false);
+            };
+
+            return (
+                <nav>
+                    <div className="nav-container">
+                        <div className="logo" onClick={() => handleNavigate('home')}>
+                            SANDBOX
+                        </div>
+                        <ul className="nav-links">
+                            {pages.map(page => (
+                                <li key={page.id}>
+                                    <a onClick={() => handleNavigate(page.id)}>
+                                        {page.label}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                        <div className="nav-auth">
+                            <button className="nav-btn">Creator Login</button>
+                            <button className="nav-btn">Brand Login</button>
+                        </div>
+                        <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
+                </nav>
+            );
+        }
+
+        // Footer Component
+        function Footer() {
+            return (
+                <footer>
+                    <div className="container">
+                        <div className="footer-content">
+                            <div className="footer-column">
+                                <h4>Brand</h4>
+                                <ul>
+                                    <li><a href="#">About</a></li>
+                                    <li><a href="#">Contact</a></li>
+                                    <li><a href="#">Blog</a></li>
+                                    <li><a href="#">Press</a></li>
+                                </ul>
+                            </div>
+                            <div className="footer-column">
+                                <h4>For Creators</h4>
+                                <ul>
+                                    <li><a href="#">Browse Jobs</a></li>
+                                    <li><a href="#">Sign Up</a></li>
+                                    <li><a href="#">Creator Guide</a></li>
+                                    <li><a href="#">Pricing</a></li>
+                                </ul>
+                            </div>
+                            <div className="footer-column">
+                                <h4>For Brands</h4>
+                                <ul>
+                                    <li><a href="#">Browse Creators</a></li>
+                                    <li><a href="#">Post a Job</a></li>
+                                    <li><a href="#">Brand Guide</a></li>
+                                    <li><a href="#">API Docs</a></li>
+                                </ul>
+                            </div>
+                            <div className="footer-column">
+                                <h4>Resources</h4>
+                                <ul>
+                                    <li><a href="#">Privacy</a></li>
+                                    <li><a href="#">Terms</a></li>
+                                    <li><a href="#">Cookies</a></li>
+                                    <li><a href="#">Status</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="footer-badge">MAX 10% COMMISSION</div>
+                        <div className="footer-bottom">
+                            <p>&copy; 2026 Sandbox. Connecting companies and creators. All rights reserved.</p>
+                        </div>
+                    </div>
+                </footer>
+            );
+        }
+
+        // Home Page Component
+        function HomePage() {
+            const creatorsSample = [
+                { id: 1, name: 'Sarah Chen', niche: 'Beauty', followers: '245K', engagement: '8.2%', tier: 'Pro', rate: '$1,500', avatar: 'gradient-1' },
+                { id: 2, name: 'Marcus Johnson', niche: 'Lifestyle', followers: '89K', engagement: '12.5%', tier: 'Established', rate: '$750', avatar: 'gradient-2' },
+                { id: 3, name: 'Emma Rodriguez', niche: 'Fashion', followers: '567K', engagement: '15.3%', tier: 'Elite', rate: '$5,000', avatar: 'gradient-3' },
+                { id: 4, name: 'James Park', niche: 'Tech', followers: '156K', engagement: '9.8%', tier: 'Established', rate: '$950', avatar: 'gradient-4' },
+                { id: 5, name: 'Olivia Williams', niche: 'Fitness', followers: '432K', engagement: '11.2%', tier: 'Pro', rate: '$2,200', avatar: 'gradient-5' },
+                { id: 6, name: 'Alex Torres', niche: 'Food', followers: '78K', engagement: '14.1%', tier: 'Rising', rate: '$450', avatar: 'gradient-6' },
+            ];
+
+            const testimonials = [
+                { text: "Sandbox has been a game-changer for my creator business. Fair pricing, amazing brands, and zero gatekeeping.", author: "Sarah Chen", role: "UGC Creator" },
+                { text: "We've found our best creators on Sandbox. The commission structure is the best in the industry.", author: "Michael Brooks", role: "Brand Manager, GlowTech" },
+                { text: "No more middle-men taking cuts. Sandbox connects us directly with brands who value authentic content.", author: "James Park", role: "Lifestyle Creator" },
+            ];
+
+            return (
+                <div>
+                    {/* Hero */}
+                    <section className="hero">
+                        <div className="hero-blob"></div>
+                        <div className="hero-content">
+                            <div className="hero-title">SANDBOX</div>
+                            <div className="hero-tagline">CONNECTING COMPANIES AND CREATORS</div>
+                            <div className="hero-badges">
+                                <div className="badge">10% MAX COMMISSION</div>
+                                <div className="badge">NO GATEKEEPING</div>
+                                <div className="badge">WIDE OPEN</div>
+                            </div>
+                            <div className="hero-ctas">
+                                <button className="btn btn-primary">I'm a Creator</button>
+                                <button className="btn btn-secondary">I'm a Brand</button>
+                            </div>
+                        </div>
+                        <div className="scroll-indicator">↓</div>
+                    </section>
+
+                    {/* Stats Bar */}
+                    <section className="stats-bar">
+                        <div className="stats-container">
+                            <div className="stat">
+                                <div className="stat-number">1,000+</div>
+                                <div className="stat-label">Active Creators</div>
+                            </div>
+                            <div className="stat">
+                                <div className="stat-number">150</div>
+                                <div className="stat-label">Brand Partners</div>
+                            </div>
+                            <div className="stat">
+                                <div className="stat-number">$20K</div>
+                                <div className="stat-label">Monthly Volume</div>
+                            </div>
+                            <div className="stat">
+                                <div className="stat-number">MAX 10%</div>
+                                <div className="stat-label">Commission</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* How It Works */}
+                    <section className="how-it-works">
+                        <div className="container">
+                            <h2 className="section-title">
+                                <span className="section-title-line">HOW IT WORKS</span>
+                            </h2>
+                            <div className="two-column">
+                                <div>
+                                    <h3 className="column-title column-title-orange">FOR CREATORS</h3>
+                                    <div className="steps">
+                                        <div className="step">
+                                            <div className="step-number">01</div>
+                                            <div className="step-content">
+                                                <h4>Sign Up & Build</h4>
+                                                <p>Create your profile with your best work and rate card.</p>
+                                            </div>
+                                        </div>
+                                        <div className="step">
+                                            <div className="step-number">02</div>
+                                            <div className="step-content">
+                                                <h4>Get Discovered</h4>
+                                                <p>Brands browse and reach out directly. No middlemen.</p>
+                                            </div>
+                                        </div>
+                                        <div className="step">
+                                            <div className="step-number">03</div>
+                                            <div className="step-content">
+                                                <h4>Negotiate & Create</h4>
+                                                <p>Agree on brief, shoot content, deliver amazing work.</p>
+                                            </div>
+                                        </div>
+                                        <div className="step">
+                                            <div className="step-number">04</div>
+                                            <div className="step-content">
+                                                <h4>Get Paid</h4>
+                                                <p>Escrow release after approval. Keep 90-98% of earnings.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 className="column-title column-title-purple">FOR BRANDS</h3>
+                                    <div className="steps">
+                                        <div className="step">
+                                            <div className="step-number">01</div>
+                                            <div className="step-content">
+                                                <h4>Post a Job</h4>
+                                                <p>Brief your campaign, budget, and deliverables.</p>
+                                            </div>
+                                        </div>
+                                        <div className="step">
+                                            <div className="step-number">02</div>
+                                            <div className="step-content">
+                                                <h4>Browse & Hire</h4>
+                                                <p>Find creators by niche, followers, engagement, style.</p>
+                                            </div>
+                                        </div>
+                                        <div className="step">
+                                            <div className="step-number">03</div>
+                                            <div className="step-content">
+                                                <h4>Manage Campaign</h4>
+                                                <p>Collaborate via Sandbox, track progress in real-time.</p>
+                                            </div>
+                                        </div>
+                                        <div className="step">
+                                            <div className="step-number">04</div>
+                                            <div className="step-content">
+                                                <h4>Approve & Pay</h4>
+                                                <p>Review content, approve, and release escrow payment.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Featured Creators */}
+                    <section>
+                        <div className="container">
+                            <h2 className="section-title">
+                                <span className="section-title-line">FEATURED CREATORS</span>
+                            </h2>
+                            <div className="creators-grid">
+                                {creatorsSample.map(creator => (
+                                    <div key={creator.id} className="creator-card fade-in-view">
+                                        <div className="creator-avatar"></div>
+                                        <div className="creator-name">{creator.name}</div>
+                                        <div className="creator-niche">
+                                            <span className="niche-tag">{creator.niche}</span>
+                                        </div>
+                                        <div className={`creator-tier ${creator.tier.toLowerCase()}`}>
+                                            {creator.tier}
+                                        </div>
+                                        <div className="creator-stats">
+                                            <div className="creator-stat">
+                                                <div className="creator-stat-value">{creator.followers}</div>
+                                                <div className="creator-stat-label">Followers</div>
+                                            </div>
+                                            <div className="creator-stat">
+                                                <div className="creator-stat-value">{creator.engagement}</div>
+                                                <div className="creator-stat-label">Engagement</div>
+                                            </div>
+                                        </div>
+                                        <div className="creator-content-types">
+                                            <span className="content-type">Photo</span>
+                                            <span className="content-type">Video</span>
+                                            <span className="content-type">UGC</span>
+                                        </div>
+                                        <div className="creator-rate">from {creator.rate}</div>
+                                        <a href="#" className="creator-cta">View Profile →</a>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* For Brands */}
+                    <section className="brands-section">
+                        <div className="container">
+                            <h2 className="section-title">
+                                <span className="section-title-line">BRANDS LOVE SANDBOX</span>
+                            </h2>
+                            <div className="brands-highlight">
+                                <div>
+                                    <h3>Why Use Sandbox?</h3>
+                                    <p>No gatekeeping. No inflated creator fees. No middlemen taking 30% commissions.</p>
+                                    <p><strong>You connect directly with creators.</strong> You negotiate fairly. You pay less. Everyone wins.</p>
+                                    <p>The market curates itself. Best creators rise to the top. Brands get premium UGC at fair prices.</p>
+                                    <button className="btn btn-secondary">Start Hiring Creators</button>
+                                </div>
+                                <div>
+                                    <div className="competitor-comparison">
+                                        <h4>Creator Commission Comparison</h4>
+                                        <div className="comparison-item">
+                                            <span>Billo</span>
+                                            <strong>20% →</strong>
+                                        </div>
+                                        <div className="comparison-item">
+                                            <span>Insense</span>
+                                            <strong>30% →</strong>
+                                        </div>
+                                        <div className="comparison-item">
+                                            <span>IZEA</span>
+                                            <strong>15% →</strong>
+                                        </div>
+                                        <div className="comparison-item sandbox">
+                                            <span>SANDBOX</span>
+                                            <strong>MAX 10%</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Testimonials */}
+                    <section className="testimonials">
+                        <div className="container">
+                            <h2 className="section-title">
+                                <span className="section-title-line">WHAT THEY SAY</span>
+                            </h2>
+                            <div className="testimonials-grid">
+                                {testimonials.map((testimonial, idx) => (
+                                    <div key={idx} className="testimonial-card fade-in-view">
+                                        <div className="testimonial-quote">"</div>
+                                        <p className="testimonial-text">{testimonial.text}</p>
+                                        <div className="testimonial-author">{testimonial.author}</div>
+                                        <div className="testimonial-role">{testimonial.role}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Pricing Preview */}
+                    <section>
+                        <div className="container">
+                            <h2 className="section-title">
+                                <span className="section-title-line">SIMPLE PRICING</span>
+                            </h2>
+                            <div className="pricing-preview">
+                                <div className="pricing-block">
+                                    <h3>For Creators</h3>
+                                    <p><strong>FREE to start.</strong> Choose your tier, grow your business, keep more of your earnings.</p>
+                                    <p>No setup fees. No platform taxes. 10% commission maximum.</p>
+                                    <button className="btn btn-primary">View Creator Pricing →</button>
+                                </div>
+                                <div className="pricing-block">
+                                    <h3>For Brands</h3>
+                                    <p><strong>Browse free.</strong> Pay $19.99/mo for unlimited access and job posting.</p>
+                                    <p>No per-creator fees. No platform tax. Just flat monthly access.</p>
+                                    <button className="btn btn-secondary">View Brand Pricing →</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Blog Preview */}
+                    <section className="blog">
+                        <div className="container">
+                            <h2 className="section-title">
+                                <span className="section-title-line">LATEST FROM BLOG</span>
+                            </h2>
+                            <div className="blog-grid">
+                                {[
+                                    { date: 'April 10, 2026', title: 'The Future of UGC: Why Authenticity Wins', category: 'Creator Tips' },
+                                    { date: 'April 5, 2026', title: 'How to Build Your Creator Personal Brand', category: 'Growth' },
+                                    { date: 'March 28, 2026', title: 'Brand Guide: Finding the Right UGC Creator', category: 'Brands' },
+                                ].map((post, idx) => (
+                                    <div key={idx} className="blog-card fade-in-view">
+                                        <div className="blog-date">{post.date}</div>
+                                        <h3 className="blog-title">{post.title}</h3>
+                                        <p className="blog-excerpt">Discover insights and strategies to grow your creator business and land better brand partnerships on Sandbox.</p>
+                                        <span className="blog-category">{post.category}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Newsletter */}
+                    <section className="newsletter">
+                        <div className="newsletter-container">
+                            <h2>JOIN THE SANDBOX</h2>
+                            <p>For creators and brands who want to cut out the middleman.</p>
+                            <form className="newsletter-form">
+                                <input type="email" placeholder="your@email.com" required />
+                                <button type="submit">Subscribe</button>
+                            </form>
+                        </div>
+                    </section>
+
+                    {/* CTA */}
+                    <section className="cta-section">
+                        <div className="container">
+                            <h2>READY TO CREATE?</h2>
+                            <div className="cta-buttons">
+                                <button className="btn btn-primary">Join as Creator</button>
+                                <button className="btn btn-secondary">Join as Brand</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
+        }
+
+        // About Page Component
+        function AboutPage() {
+            return (
+                <div>
+                    <section style={{ paddingTop: '140px' }}>
+                        <div className="container">
+                            <h1 style={{ marginBottom: '2rem', textTransform: 'uppercase' }}>About Sandbox</h1>
+                            <div className="about-content">
+                                <h3>The Origin Story</h3>
+                                <p>Sandbox started with a simple frustration. A close friend does boudoir photography — intimate, beautiful, bold work. A dentist reached out wanting a UGC reel for TikTok. Simple job. $750 budget. Fair deal.</p>
+                                <p>But the creator had to go through an agency that took $250. Fees for platform access, listing creation, payment processing. For a single $750 gig, the creator walked away with less than $500. The dentist paid more than they should have. The agency made a percentage for connecting two people who could find each other.</p>
+
+                                <h3>The Idea</h3>
+                                <p>Why does there need to be a middleman? Why can't creators list their work directly? Why can't brands find and negotiate with creators directly?</p>
+                                <p><strong>Sandbox removes the middleman.</strong> No gatekeeping. No hidden fees. No artificial scarcity. Just creators, brands, and a fair marketplace.</p>
+
+                                <h3>Philosophy</h3>
+                                <p>The best creators should be discoverable by anyone. The market curates itself. Competition is healthy. Transparency builds trust.</p>
+                                <p>We charge a flat, low commission because we're confident our product solves a real problem. 10% maximum. That's it. No hidden platform taxes. No per-creator fees. No surprise charges.</p>
+
+                                <h3>Who We're Building For</h3>
+                                <p><strong>Creators:</strong> You deserve to keep more of your earnings. You shouldn't have to apply to agencies that slow down your growth. You should set your own rates and negotiate directly.</p>
+                                <p><strong>Brands:</strong> You're tired of inflated fees and creator pools you can't control. You want to work with micro-creators who bring authenticity. You deserve transparent pricing and real relationships.</p>
+
+                                <h3>Our Team</h3>
+                            </div>
+
+                            <div className="team-grid">
+                                {[
+                                    { name: 'Alex Morgan', role: 'Founder & CEO' },
+                                    { name: 'Jordan Chen', role: 'Head of Creator Operations' },
+                                    { name: 'Casey Williams', role: 'Head of Brand Partnerships' },
+                                ].map((member, idx) => (
+                                    <div key={idx} className="team-member fade-in-view">
+                                        <div className="team-member-avatar"></div>
+                                        <h4>{member.name}</h4>
+                                        <p>{member.role}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
+        }
+
+        // Creators Page Component
+        function CreatorsPage() {
+            const [selectedNiche, setSelectedNiche] = useState(null);
+            const [sortBy, setSortBy] = useState('followers');
+
+            const niches = ['Lifestyle', 'Fashion', 'Beauty', 'Food', 'Fitness', 'Tech', 'Travel', 'Boudoir', 'Real Estate', 'Healthcare'];
+
+            const allCreators = [
+                { id: 1, name: 'Sarah Chen', niche: 'Beauty', followers: '245K', engagement: '8.2%', tier: 'Pro', rate: '$1,500' },
+                { id: 2, name: 'Marcus Johnson', niche: 'Lifestyle', followers: '89K', engagement: '12.5%', tier: 'Established', rate: '$750' },
+                { id: 3, name: 'Emma Rodriguez', niche: 'Fashion', followers: '567K', engagement: '15.3%', tier: 'Elite', rate: '$5,000' },
+                { id: 4, name: 'James Park', niche: 'Tech', followers: '156K', engagement: '9.8%', tier: 'Established', rate: '$950' },
+                { id: 5, name: 'Olivia Williams', niche: 'Fitness', followers: '432K', engagement: '11.2%', tier: 'Pro', rate: '$2,200' },
+                { id: 6, name: 'Alex Torres', niche: 'Food', followers: '78K', engagement: '14.1%', tier: 'Rising', rate: '$450' },
+                { id: 7, name: 'Lisa Chang', niche: 'Travel', followers: '312K', engagement: '10.5%', tier: 'Pro', rate: '$1,800' },
+                { id: 8, name: 'David Brown', niche: 'Lifestyle', followers: '45K', engagement: '16.2%', tier: 'Rising', rate: '$350' },
+                { id: 9, name: 'Nina Patel', niche: 'Beauty', followers: '189K', engagement: '13.8%', tier: 'Established', rate: '$1,100' },
+                { id: 10, name: 'Ryan OConnell', niche: 'Fashion', followers: '456K', engagement: '12.1%', tier: 'Pro', rate: '$3,500' },
+                { id: 11, name: 'Sophie Laurent', niche: 'Fitness', followers: '298K', engagement: '14.7%', tier: 'Pro', rate: '$1,950' },
+                { id: 12, name: 'Kai Nakamura', niche: 'Tech', followers: '234K', engagement: '11.3%', tier: 'Established', rate: '$1,400' },
+            ];
+
+            const filteredCreators = selectedNiche
+                ? allCreators.filter(c => c.niche === selectedNiche)
+                : allCreators;
+
+            return (
+                <div>
+                    <section style={{ paddingTop: '140px' }}>
+                        <div className="container">
+                            <h1 style={{ marginBottom: '2rem', textTransform: 'uppercase' }}>Browse Creators</h1>
+
+                            <div style={{ marginBottom: '2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                <button
+                                    className="niche-tag"
+                                    style={{ background: selectedNiche === null ? '#FF6B35' : 'transparent', color: selectedNiche === null ? '#FAFAFA' : '#111111' }}
+                                    onClick={() => setSelectedNiche(null)}
+                                >
+                                    All
+                                </button>
+                                {niches.map(niche => (
+                                    <button
+                                        key={niche}
+                                        className="niche-tag"
+                                        style={{ background: selectedNiche === niche ? '#FF6B35' : 'transparent', color: selectedNiche === niche ? '#FAFAFA' : '#111111' }}
+                                        onClick={() => setSelectedNiche(niche)}
+                                    >
+                                        {niche}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div style={{ marginBottom: '2rem' }}>
+                                <label style={{ marginRight: '1rem', fontWeight: '600' }}>Sort by:</label>
+                                <select
+                                    value={sortBy}
+                                    onChange={(e) => setSortBy(e.target.value)}
+                                    style={{ padding: '0.5rem', border: '2px solid #111111', fontSize: '1rem' }}
+                                >
+                                    <option value="followers">Followers (High to Low)</option>
+                                    <option value="engagement">Engagement Rate</option>
+                                    <option value="price">Price (Low to High)</option>
+                                </select>
+                            </div>
+
+                            <div className="creators-grid">
+                                {filteredCreators.map(creator => (
+                                    <div key={creator.id} className="creator-card fade-in-view">
+                                        <div className="creator-avatar"></div>
+                                        <div className="creator-name">{creator.name}</div>
+                                        <div className="creator-niche">
+                                            <span className="niche-tag">{creator.niche}</span>
+                                        </div>
+                                        <div className={`creator-tier ${creator.tier.toLowerCase()}`}>
+                                            {creator.tier}
+                                        </div>
+                                        <div className="creator-stats">
+                                            <div className="creator-stat">
+                                                <div className="creator-stat-value">{creator.followers}</div>
+                                                <div className="creator-stat-label">Followers</div>
+                                            </div>
+                                            <div className="creator-stat">
+                                                <div className="creator-stat-value">{creator.engagement}</div>
+                                                <div className="creator-stat-label">Engagement</div>
+                                            </div>
+                                        </div>
+                                        <div className="creator-content-types">
+                                            <span className="content-type">Photo</span>
+                                            <span className="content-type">Video</span>
+                                            <span className="content-type">UGC</span>
+                                        </div>
+                                        <div className="creator-rate">from {creator.rate}</div>
+                                        <a href="#" className="creator-cta">View Profile →</a>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
+        }
+
+        // Single Creator Page
+        function CreatorProfile() {
+            return (
+                <div>
+                    <div className="profile-header">
+                        <div className="profile-header-content">
+                            <div className="profile-avatar-large"></div>
+                            <div className="profile-info">
+                                <h1>Emma Rodriguez</h1>
+                                <p>Fashion & Lifestyle Creator</p>
+                                <div className="profile-stats-large">
+                                    <div className="profile-stat-large">
+                                        <div className="profile-stat-large-value">567K</div>
+                                        <div className="profile-stat-large-label">Followers</div>
+                                    </div>
+                                    <div className="profile-stat-large">
+                                        <div className="profile-stat-large-value">15.3%</div>
+                                        <div className="profile-stat-large-label">Engagement</div>
+                                    </div>
+                                    <div className="profile-stat-large">
+                                        <div className="profile-stat-large-value">98%</div>
+                                        <div className="profile-stat-large-label">Rating</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button className="btn btn-primary">Hire This Creator</button>
+                                <div style={{ marginTop: '1rem', background: '#FAFAFA', color: '#111111', padding: '1rem', borderRadius: '4px' }}>
+                                    <strong>From $5,000</strong> per project
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <section style={{ paddingTop: '80px' }}>
+                        <div className="container">
+                            <h3 style={{ marginBottom: '2rem', textTransform: 'uppercase' }}>About</h3>
+                            <p style={{ color: '#666666', marginBottom: '2rem', lineHeight: '1.8' }}>
+                                Fashion and lifestyle creator with 5+ years of experience creating authentic, high-quality UGC for premium brands. Specializes in product photography, styling, and short-form video content. Known for attention to detail and ability to match brand aesthetics perfectly.
+                            </p>
+
+                            <h3 style={{ marginBottom: '2rem', textTransform: 'uppercase' }}>Portfolio</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '3rem' }}>
+                                {[1,2,3,4,5,6,7,8].map(i => (
+                                    <div key={i} style={{ background: 'linear-gradient(135deg, #FF6B35, #8B5CF6)', height: '200px', border: '2px solid #111111' }}></div>
+                                ))}
+                            </div>
+
+                            <h3 style={{ marginBottom: '2rem', textTransform: 'uppercase' }}>Reviews</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
+                                {[
+                                    { brand: 'StyleCo', text: 'Emma nailed the brief. Quality was exceptional. Will hire again.' },
+                                    { brand: 'LuxeLife', text: 'Professional, responsive, delivered ahead of schedule. Highly recommend.' },
+                                ].map((review, idx) => (
+                                    <div key={idx} style={{ border: '2px solid #111111', padding: '1.5rem' }}>
+                                        <strong>{review.brand}</strong>
+                                        <p style={{ marginTop: '1rem', color: '#666666' }}>{review.text}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
+        }
+
+        // Blog Index Page
+        function BlogPage() {
+            const posts = [
+                { id: 1, date: 'April 10, 2026', title: 'The Future of UGC: Why Authenticity Wins', excerpt: 'User-generated content is the new king. Here\'s why authentic creators outperform polished ads.', category: 'Creator Tips' },
+                { id: 2, date: 'April 5, 2026', title: 'How to Build Your Creator Personal Brand', excerpt: 'Your personal brand is your business. Learn how to build one that attracts premium brand partnerships.', category: 'Growth' },
+                { id: 3, date: 'March 28, 2026', title: 'Brand Guide: Finding the Right UGC Creator', excerpt: 'Not all creators are equal. Here\'s how to identify creators whose style matches your brand.', category: 'Brands' },
+                { id: 4, date: 'March 20, 2026', title: 'Creator Economy 2026: Trends & Opportunities', excerpt: 'The creator economy is evolving fast. Here\'s what\'s changing and how to stay ahead.', category: 'Industry' },
+                { id: 5, date: 'March 15, 2026', title: 'Negotiating Fair Rates: A Creator\'s Guide', excerpt: 'Stop undercharging. Learn how to negotiate rates that reflect your worth and experience.', category: 'Creator Tips' },
+                { id: 6, date: 'March 8, 2026', title: 'ROI Metrics That Matter for UGC Campaigns', excerpt: 'Not all metrics are equal. Focus on the ones that actually impact your bottom line.', category: 'Brands' },
+            ];
+
+            return (
+                <div>
+                    <section style={{ paddingTop: '140px' }}>
+                        <div className="container">
+                            <h1 style={{ marginBottom: '2rem', textTransform: 'uppercase' }}>Sandbox Blog</h1>
+                            <div className="blog-grid">
+                                {posts.map(post => (
+                                    <div key={post.id} className="blog-card fade-in-view">
+                                        <div className="blog-date">{post.date}</div>
+                                        <h3 className="blog-title">{post.title}</h3>
+                                        <p className="blog-excerpt">{post.excerpt}</p>
+                                        <span className="blog-category">{post.category}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
+        }
+
+        // Single Blog Post
+        function BlogPost() {
+            return (
+                <div>
+                    <section style={{ paddingTop: '140px', paddingBottom: '2rem' }}>
+                        <div className="container" style={{ maxWidth: '800px' }}>
+                            <h1 style={{ marginBottom: '2rem', textTransform: 'uppercase' }}>The Future of UGC: Why Authenticity Wins</h1>
+                            <div className="article-meta">
+                                <div className="article-meta-item">
+                                    <span className="article-meta-label">Published</span>
+                                    <span className="article-meta-value">April 10, 2026</span>
+                                </div>
+                                <div className="article-meta-item">
+                                    <span className="article-meta-label">Category</span>
+                                    <span className="article-meta-value">Creator Tips</span>
+                                </div>
+                                <div className="article-meta-item">
+                                    <span className="article-meta-label">Read Time</span>
+                                    <span className="article-meta-value">5 min</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <div className="article-content">
+                            <p>User-generated content has fundamentally changed how brands market themselves. What was once a niche tactic is now the baseline expectation for authenticity-hungry consumers.</p>
+
+                            <h2>Why Authenticity Beats Perfection</h2>
+                            <p>Consumers are tired of polished, filtered brand messaging. They crave realness. When a creator shows a product in their actual life, with natural lighting and honest feedback, conversion rates spike.</p>
+                            <p>The best UGC creators aren't Instagram models. They're people who genuinely use and love the products they're promoting. Their audiences trust them because authenticity is their foundation.</p>
+
+                            <h3>The Data Supports It</h3>
+                            <p>Studies show that UGC outperforms traditional advertising by 5-10x on engagement metrics. Why? Because people trust people, not corporations.</p>
+
+                            <h2>What This Means for Creators</h2>
+                            <p>If you're trying to be the next mega-influencer, you're fighting the wrong battle. Instead:</p>
+                            <ul>
+                                <li>Focus on niche communities where you're genuinely respected</li>
+                                <li>Be selective about brand partnerships</li>
+                                <li>Show the real, unfiltered side of your life</li>
+                                <li>Charge premium rates for authentic work</li>
+                            </ul>
+
+                            <p>Brands are shifting budgets from mega-influencers to micro-creators with authentic voices. This is your moment.</p>
+
+                            <h2>What Brands Should Look For</h2>
+                            <p>When hiring UGC creators, stop looking at follower counts. Look at engagement. Look at their content quality. Look at whether they genuinely align with your brand values.</p>
+
+                            <p>The best partnerships happen when creator and brand are naturally aligned. That's when the magic happens.</p>
+                        </div>
+                    </section>
+                </div>
+            );
+        }
+
+        // Pricing Page
+        function PricingPage() {
+            return (
+                <div>
+                    <section style={{ paddingTop: '140px' }}>
+                        <div className="container">
+                            <h1 style={{ marginBottom: '2rem', textTransform: 'uppercase' }}>Creator Pricing</h1>
+
+                            <table className="pricing-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tier</th>
+                                        <th>Follower Count</th>
+                                        <th>Monthly Fee</th>
+                                        <th>Commission Rate</th>
+                                        <th>Best For</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Starter</strong></td>
+                                        <td>0 - 10K</td>
+                                        <td>Free</td>
+                                        <td>10%</td>
+                                        <td>New creators just getting started</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Rising</strong></td>
+                                        <td>10K - 50K</td>
+                                        <td>$4.99/mo</td>
+                                        <td>8%</td>
+                                        <td>Emerging creators with momentum</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Established</strong></td>
+                                        <td>50K - 100K</td>
+                                        <td>$9.99/mo</td>
+                                        <td>6%</td>
+                                        <td>Proven creators with solid following</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Pro</strong></td>
+                                        <td>100K - 500K</td>
+                                        <td>$19.99/mo</td>
+                                        <td>4%</td>
+                                        <td>Professional creators with large audience</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Elite</strong></td>
+                                        <td>500K+</td>
+                                        <td>$49.99/mo</td>
+                                        <td>2%</td>
+                                        <td>Top-tier creators with massive reach</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div style={{ background: '#FFF3E0', border: '3px solid #FF6B35', padding: '2rem', marginTop: '3rem', marginBottom: '3rem' }}>
+                                <h3 style={{ marginBottom: '1rem' }}>Optional: Remove Commission</h3>
+                                <p style={{ color: '#666666', marginBottom: '1rem' }}>Starter tier creators can opt to remove commission fees by paying an additional $2.99/mo.</p>
+                                <p><strong>What you keep:</strong> 100% of project fees. Just pay the platform fee and marketplace access.</p>
+                            </div>
+
+                            <h2 style={{ marginTop: '3rem', marginBottom: '2rem', textTransform: 'uppercase' }}>Brand Pricing</h2>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
+                                {[
+                                    { tier: 'Free', price: '$0/mo', features: ['Browse creators', '3 messages/mo', 'See reviews & stats', 'Basic profile'] },
+                                    { tier: 'Pro', price: '$19.99/mo', features: ['Unlimited messages', 'Post unlimited jobs', 'Campaign analytics', 'Creator matching'] },
+                                    { tier: 'Enterprise', price: '$99.99/mo', features: ['Featured listings', 'Priority support', 'API access', 'Custom integrations'] },
+                                ].map((plan, idx) => (
+                                    <div key={idx} style={{ border: '3px solid #111111', padding: '2rem' }}>
+                                        <h3>{plan.tier}</h3>
+                                        <div style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '1rem' }}>{plan.price}</div>
+                                        <ul style={{ listStyle: 'none' }}>
+                                            {plan.features.map((feature, i) => (
+                                                <li key={i} style={{ paddingBottom: '0.75rem', borderBottom: '1px solid #eee' }}>✓ {feature}</li>
+                                            ))}
+                                        </ul>
+                                        <button className="btn btn-primary" style={{ width: '100%', marginTop: '1.5rem' }}>Get Started</button>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <h2 style={{ marginTop: '3rem', marginBottom: '2rem', textTransform: 'uppercase' }}>Revenue Projections</h2>
+                            <p style={{ color: '#666666', marginBottom: '2rem' }}>Here's what creators typically earn at each tier (based on $2,500 average project fee):</p>
+
+                            <table className="pricing-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tier</th>
+                                        <th>Projects/Month</th>
+                                        <th>Gross Revenue</th>
+                                        <th>Sandbox Fee</th>
+                                        <th>Your Take-Home</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Starter (10% comm)</td>
+                                        <td>2</td>
+                                        <td>$5,000</td>
+                                        <td>$500</td>
+                                        <td><strong>$4,500</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Rising (8% comm)</td>
+                                        <td>4</td>
+                                        <td>$10,000</td>
+                                        <td>$800 + $4.99</td>
+                                        <td><strong>$9,195</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Established (6% comm)</td>
+                                        <td>6</td>
+                                        <td>$15,000</td>
+                                        <td>$900 + $9.99</td>
+                                        <td><strong>$14,090</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pro (4% comm)</td>
+                                        <td>8</td>
+                                        <td>$20,000</td>
+                                        <td>$800 + $19.99</td>
+                                        <td><strong>$19,180</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Elite (2% comm)</td>
+                                        <td>10</td>
+                                        <td>$25,000</td>
+                                        <td>$500 + $49.99</td>
+                                        <td><strong>$24,450</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            );
+        }
+
+        // Contact Page
+        function ContactPage() {
+            const [contactType, setContactType] = useState('creator');
+
+            return (
+                <div>
+                    <section style={{ paddingTop: '140px' }}>
+                        <div className="container">
+                            <h1 style={{ marginBottom: '2rem', textTransform: 'uppercase' }}>Get in Touch</h1>
+
+                            <div className="contact-container">
+                                <div className="contact-form">
+                                    <div className="form-toggle">
+                                        <button
+                                            className={`toggle-btn ${contactType === 'creator' ? 'active' : ''}`}
+                                            onClick={() => setContactType('creator')}
+                                        >
+                                            Creator
+                                        </button>
+                                        <button
+                                            className={`toggle-btn ${contactType === 'brand' ? 'active brand' : ''}`}
+                                            onClick={() => setContactType('brand')}
+                                        >
+                                            Brand
+                                        </button>
+                                    </div>
+
+                                    <form>
+                                        <div className="form-group">
+                                            <label>Name</label>
+                                            <input type="text" placeholder="Your name" required />
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Email</label>
+                                            <input type="email" placeholder="your@email.com" required />
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Message</label>
+                                            <textarea placeholder="How can we help?" required></textarea>
+                                        </div>
+                                        <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>Send</button>
+                                    </form>
+                                </div>
+
+                                <div className="contact-info">
+                                    <h3>Contact Info</h3>
+                                    <div style={{ marginBottom: '2rem' }}>
+                                        <div style={{ color: '#666666', marginBottom: '0.5rem' }}>Email</div>
+                                        <div style={{ fontWeight: '600' }}>hello@sandbox.co</div>
+                                    </div>
+                                    <div style={{ marginBottom: '2rem' }}>
+                                        <div style={{ color: '#666666', marginBottom: '0.5rem' }}>Address</div>
+                                        <div style={{ fontWeight: '600' }}>San Francisco, CA</div>
+                                    </div>
+                                    <div style={{ marginBottom: '2rem' }}>
+                                        <div style={{ color: '#666666', marginBottom: '0.5rem' }}>Response Time</div>
+                                        <div style={{ fontWeight: '600' }}>24 hours</div>
+                                    </div>
+                                    <div style={{ marginBottom: '2rem', padding: '1rem', background: 'rgba(255, 107, 53, 0.1)', border: '2px solid #FF6B35' }}>
+                                        <strong>Questions?</strong>
+                                        <p style={{ marginTop: '0.5rem', fontSize: '0.9rem' }}>Check out our FAQ or browse the blog for answers.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
+        }
+
+        // Services Page
+        function ServicesPage() {
+            return (
+                <div>
+                    <section style={{ paddingTop: '140px' }}>
+                        <div className="container">
+                            <h1 style={{ marginBottom: '2rem', textTransform: 'uppercase' }}>How Sandbox Works</h1>
+
+                            <h2 style={{ marginTop: '3rem', marginBottom: '2rem', textTransform: 'uppercase' }}>For Creators</h2>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
+                                {[
+                                    { title: 'Build Your Profile', desc: 'Show your best work. Set your rates. Attract the right brands.' },
+                                    { title: 'Get Discovered', desc: 'Brands find you through search, filters, and personalized matching.' },
+                                    { title: 'Direct Negotiation', desc: 'No gatekeepers. You talk directly with brands about deals.' },
+                                    { title: 'Create & Deliver', desc: 'Collaborate on brief, shoot content, deliver amazing work.' },
+                                    { title: 'Get Paid Fast', desc: 'Escrow release after approval. Your money, no delays.' },
+                                    { title: 'Grow Your Business', desc: 'Access analytics, reviews, and portfolio to build your brand.' },
+                                ].map((feature, idx) => (
+                                    <div key={idx} style={{ border: '2px solid #111111', padding: '1.5rem' }}>
+                                        <h4 style={{ marginBottom: '0.5rem' }}>{feature.title}</h4>
+                                        <p style={{ color: '#666666', fontSize: '0.9rem' }}>{feature.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <h2 style={{ marginTop: '3rem', marginBottom: '2rem', textTransform: 'uppercase' }}>For Brands</h2>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
+                                {[
+                                    { title: 'Post a Job Brief', desc: 'Share your campaign, budget, deliverables, and creative direction.' },
+                                    { title: 'Browse Curated Creators', desc: 'Filter by niche, followers, engagement, style, price.' },
+                                    { title: 'Direct Negotiation', desc: 'Message creators directly. Agree on terms without middlemen.' },
+                                    { title: 'Manage Campaign', desc: 'Collaborate in-platform. Track progress in real-time.' },
+                                    { title: 'Review & Approve', desc: 'See drafts before final delivery. Approve and release payment.' },
+                                    { title: 'Get Analytics', desc: 'Track performance. See engagement, reach, conversions.' },
+                                ].map((feature, idx) => (
+                                    <div key={idx} style={{ border: '2px solid #111111', padding: '1.5rem' }}>
+                                        <h4 style={{ marginBottom: '0.5rem' }}>{feature.title}</h4>
+                                        <p style={{ color: '#666666', fontSize: '0.9rem' }}>{feature.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <h2 style={{ marginTop: '3rem', marginBottom: '2rem', textTransform: 'uppercase' }}>Marketplace Features</h2>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1rem', marginBottom: '3rem' }}>
+                                <div style={{ border: '3px solid #111111', padding: '2rem' }}>
+                                    <h4>Stripe Connect Escrow</h4>
+                                    <p style={{ color: '#666666', marginTop: '0.5rem' }}>All payments are held in secure escrow until content is delivered and approved. Protects both creators and brands.</p>
+                                </div>
+                                <div style={{ border: '3px solid #111111', padding: '2rem' }}>
+                                    <h4>Creator Verification</h4>
+                                    <p style={{ color: '#666666', marginTop: '0.5rem' }}>Real follower counts. Real engagement rates. No fake metrics. Brands know exactly who they're hiring.</p>
+                                </div>
+                                <div style={{ border: '3px solid #111111', padding: '2rem' }}>
+                                    <h4>Review & Rating System</h4>
+                                    <p style={{ color: '#666666', marginTop: '0.5rem' }}>Both creators and brands leave reviews. Trust is built through transparency and community feedback.</p>
+                                </div>
+                                <div style={{ border: '3px solid #111111', padding: '2rem' }}>
+                                    <h4>Portfolio & Showcase</h4>
+                                    <p style={{ color: '#666666', marginTop: '0.5rem' }}>Creators build a live portfolio. Show off your best work. Brands can see exactly what they're getting.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
+        }
+
+        // 404 Page
+        function NotFoundPage() {
+            return (
+                <div className="error-page">
+                    <div className="error-content">
+                        <h1>404</h1>
+                        <div className="glitch" data-text="LOST IN THE SANDBOX">LOST IN THE SANDBOX</div>
+                        <p>This creator hasn't been discovered yet. Or the page doesn't exist.</p>
+                        <button className="btn btn-primary" style={{ marginTop: '2rem' }}>Go Home</button>
+                    </div>
+                </div>
+            );
+        }
+
+        // Style Guide Page
+        function StyleGuidePage() {
+            return (
+                <div>
+                    <section style={{ paddingTop: '140px' }}>
+                        <div className="container">
+                            <h1 style={{ marginBottom: '2rem', textTransform: 'uppercase' }}>Design System</h1>
+
+                            <h2 style={{ marginTop: '3rem', marginBottom: '2rem', textTransform: 'uppercase' }}>Color Palette</h2>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem', marginBottom: '3rem' }}>
+                                {[
+                                    { color: '#FF6B35', name: 'Orange' },
+                                    { color: '#8B5CF6', name: 'Purple' },
+                                    { color: '#3B82F6', name: 'Blue' },
+                                    { color: '#EF4444', name: 'Red' },
+                                    { color: '#111111', name: 'Dark' },
+                                ].map((swatch, idx) => (
+                                    <div key={idx} style={{ border: '2px solid #111111' }}>
+                                        <div style={{ background: swatch.color, height: '120px' }}></div>
+                                        <div style={{ padding: '1rem' }}>
+                                            <strong>{swatch.name}</strong>
+                                            <div style={{ fontSize: '0.8rem', color: '#666666' }}>{swatch.color}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <h2 style={{ marginTop: '3rem', marginBottom: '2rem', textTransform: 'uppercase' }}>Typography</h2>
+                            <div style={{ marginBottom: '3rem' }}>
+                                <div style={{ fontSize: '3rem', fontWeight: '700', marginBottom: '1rem' }}>Clash Display — 3rem, Bold</div>
+                                <div style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '1rem' }}>Satoshi — 1.5rem, Regular</div>
+                                <div style={{ fontSize: '1rem', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.05em' }}>JetBrains Mono — Monospace</div>
+                            </div>
+
+                            <h2 style={{ marginTop: '3rem', marginBottom: '2rem', textTransform: 'uppercase' }}>Components</h2>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
+                                <div>
+                                    <h4 style={{ marginBottom: '1rem' }}>Primary Button</h4>
+                                    <button className="btn btn-primary">I'm a Creator</button>
+                                </div>
+                                <div>
+                                    <h4 style={{ marginBottom: '1rem' }}>Secondary Button</h4>
+                                    <button className="btn btn-secondary">I'm a Brand</button>
+                                </div>
+                                <div>
+                                    <h4 style={{ marginBottom: '1rem' }}>Outline Button</h4>
+                                    <button className="btn btn-outline">Learn More</button>
+                                </div>
+                                <div>
+                                    <h4 style={{ marginBottom: '1rem' }}>Badge</h4>
+                                    <div className="badge">10% MAX COMMISSION</div>
+                                </div>
+                            </div>
+
+                            <h2 style={{ marginTop: '3rem', marginBottom: '2rem', textTransform: 'uppercase' }}>Spacing System</h2>
+                            <p style={{ color: '#666666', marginBottom: '1rem' }}>Sandbox uses a modular 1rem (16px) baseline spacing system:</p>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem' }}>
+                                {[
+                                    { label: '0.5rem', value: '8px' },
+                                    { label: '1rem', value: '16px' },
+                                    { label: '2rem', value: '32px' },
+                                    { label: '4rem', value: '64px' },
+                                ].map((item, idx) => (
+                                    <div key={idx} style={{ border: '2px solid #111111', padding: '1rem' }}>
+                                        <strong>{item.label}</strong>
+                                        <div style={{ fontSize: '0.85rem', color: '#666666' }}>{item.value}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
+        }
+
+        // Main App Component
+        function App() {
+            const [currentPage, setCurrentPage] = useState('home');
+
+            useEffect(() => {
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                const elements = document.querySelectorAll('.fade-in-view');
+                elements.forEach(el => observer.observe(el));
+
+                return () => elements.forEach(el => observer.unobserve(el));
+            }, [currentPage]);
+
+            const pages = {
+                home: <HomePage />,
+                about: <AboutPage />,
+                creators: <CreatorsPage />,
+                creator: <CreatorProfile />,
+                blog: <BlogPage />,
+                post: <BlogPost />,
+                pricing: <PricingPage />,
+                contact: <ContactPage />,
+                services: <ServicesPage />,
+                style: <StyleGuidePage />,
+                404: <NotFoundPage />,
+            };
+
+            return (
+                <>
+                    <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                    <main>
+                        {pages[currentPage] || pages['404']}
+                    </main>
+                    <Footer />
+                </>
+            );
+        }
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
