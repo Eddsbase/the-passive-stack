@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RecruitDNA — Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;background:#0a0a0f;color:#fff;line-height:1.5;min-height:100vh}
+.bg-glow{position:fixed;top:-300px;left:50%;transform:translateX(-50%);width:900px;height:900px;background:radial-gradient(circle,rgba(139,92,246,.2) 0%,transparent 60%);z-index:0;pointer-events:none}
+/* AUTH */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
+.auth-card{width:100%;max-width:420px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:40px;backdrop-filter:blur(20px)}
+.auth-logo{font-size:28px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(135deg,#a78bfa,#60a5fa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:8px}
+.auth-sub{text-align:center;color:rgba(255,255,255,.6);font-size:14px;margin-bottom:32px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:12px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#8b5cf6}
+.btn{display:inline-block;padding:12px 20px;border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;border:none;transition:all .2s;font-family:inherit;text-decoration:none;color:#fff}
+.btn-primary{background:linear-gradient(135deg,#8b5cf6,#6366f1);width:100%}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(139,92,246,.3)}
+.btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+.btn-ghost:hover{background:rgba(255,255,255,.1)}
+.btn-sm{padding:8px 14px;font-size:13px}
+.switch{text-align:center;margin-top:20px;font-size:14px;color:rgba(255,255,255,.6)}
+.switch a{color:#a78bfa;text-decoration:none;font-weight:600;cursor:pointer}
+.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#fca5a5;padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:16px}
+.ok{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#86efac;padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:16px}
+/* APP */
+.app{display:none;min-height:100vh;position:relative;z-index:1}
+.app.active{display:flex}
+.sidebar{width:240px;background:rgba(255,255,255,.02);border-right:1px solid rgba(255,255,255,.08);padding:24px 16px;display:flex;flex-direction:column;position:fixed;height:100vh;overflow-y:auto}
+.sidebar .logo{font-size:20px;font-weight:800;background:linear-gradient(135deg,#a78bfa,#60a5fa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;padding:0 12px 24px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:16px}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;color:rgba(255,255,255,.7);cursor:pointer;font-size:14px;font-weight:500;transition:all .15s;margin-bottom:2px}
+.nav-item:hover{background:rgba(255,255,255,.05);color:#fff}
+.nav-item.active{background:rgba(139,92,246,.15);color:#c4b5fd}
+.nav-item .ico{width:18px;text-align:center}
+.sidebar .user{margin-top:auto;padding:16px 12px;border-top:1px solid rgba(255,255,255,.08);font-size:12px}
+.sidebar .user .email{color:rgba(255,255,255,.5);margin-bottom:8px;word-break:break-all}
+.main{flex:1;margin-left:240px;padding:32px 40px;min-width:0}
+.page-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+.page-head h1{font-size:28px;font-weight:800;letter-spacing:-.5px}
+.page-head p{color:rgba(255,255,255,.55);font-size:14px;margin-top:4px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px}
+.stat{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px}
+.stat .label{font-size:12px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.stat .val{font-size:32px;font-weight:800;letter-spacing:-1px}
+.stat .sub{font-size:12px;color:#86efac;margin-top:4px}
+.panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px;margin-bottom:24px}
+.panel h2{font-size:18px;font-weight:700;margin-bottom:16px}
+/* PIPELINE */
+.pipeline{display:grid;grid-template-columns:repeat(6,minmax(200px,1fr));gap:12px;overflow-x:auto;padding-bottom:8px}
+.col{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px;min-height:300px}
+.col-head{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 12px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:10px}
+.col-head .name{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:rgba(255,255,255,.7)}
+.col-head .count{font-size:11px;background:rgba(255,255,255,.08);padding:2px 8px;border-radius:10px;color:rgba(255,255,255,.7)}
+.cand-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all .15s}
+.cand-card:hover{background:rgba(255,255,255,.07);border-color:rgba(139,92,246,.3)}
+.cand-card .name{font-size:14px;font-weight:700;margin-bottom:2px}
+.cand-card .title{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:8px}
+.cand-card .meta{display:flex;justify-content:space-between;align-items:center;font-size:11px}
+.cand-card .score{background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;padding:2px 8px;border-radius:8px;font-weight:700}
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{text-align:left;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;padding:12px 8px;border-bottom:1px solid rgba(255,255,255,.08)}
+.tbl td{padding:14px 8px;border-bottom:1px solid rgba(255,255,255,.05);font-size:14px}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+.tag{display:inline-block;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600;text-transform:uppercase}
+.tag-open{background:rgba(34,197,94,.15);color:#86efac}
+.tag-paused{background:rgba(234,179,8,.15);color:#fde68a}
+.tag-closed{background:rgba(239,68,68,.15);color:#fca5a5}
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.modal-bg.active{display:flex}
+.modal{background:#15151e;border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:32px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto}
+.modal h2{font-size:22px;font-weight:800;margin-bottom:4px}
+.modal p.sub{color:rgba(255,255,255,.55);font-size:13px;margin-bottom:20px}
+.modal-actions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
+.hidden{display:none!important}
+.empty{text-align:center;padding:40px 20px;color:rgba(255,255,255,.4);font-size:14px}
+@media(max-width:900px){.sidebar{position:relative;width:100%;height:auto}.main{margin-left:0;padding:20px}.pipeline{grid-template-columns:repeat(6,260px)}}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<!-- AUTH -->
+<div id="auth" class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-logo">RecruitDNA</div>
+    <div class="auth-sub" id="authSub">Sign in to your workspace</div>
+    <div id="authErr" class="err hidden"></div>
+    <div id="authOk" class="ok hidden"></div>
+    <div class="field"><label>Email</label><input id="authEmail" type="email" placeholder="you@company.com"></div>
+    <div class="field"><label>Password</label><input id="authPwd" type="password" placeholder="••••••••"></div>
+    <button class="btn btn-primary" id="authBtn">Sign in</button>
+    <div class="switch">
+      <span id="authSwitchText">Don't have an account?</span>
+      <a id="authSwitch">Sign up</a>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="app">
+  <aside class="sidebar">
+    <div class="logo">RecruitDNA</div>
+    <div class="nav-item active" data-view="dashboard"><span class="ico">◈</span>Dashboard</div>
+    <div class="nav-item" data-view="pipeline"><span class="ico">◉</span>Pipeline</div>
+    <div class="nav-item" data-view="candidates"><span class="ico">◎</span>Candidates</div>
+    <div class="nav-item" data-view="jobs"><span class="ico">◊</span>Jobs</div>
+    <div class="nav-item" data-view="ai"><span class="ico">✦</span>AI Tools</div>
+    <div class="user">
+      <div class="email" id="userEmail"></div>
+      <button class="btn btn-ghost btn-sm" id="signOut" style="width:100%">Sign out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- DASHBOARD -->
+    <section class="view" id="view-dashboard">
+      <div class="page-head">
+        <div><h1>Dashboard</h1><p>Your recruitment workspace at a glance</p></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="label">Candidates</div><div class="val" id="stCand">0</div></div>
+        <div class="stat"><div class="label">Open Jobs</div><div class="val" id="stJobs">0</div></div>
+        <div class="stat"><div class="label">In Pipeline</div><div class="val" id="stPipe">0</div></div>
+        <div class="stat"><div class="label">Hired</div><div class="val" id="stHired">0</div></div>
+      </div>
+      <div class="panel">
+        <h2>Recent activity</h2>
+        <div id="activityFeed" class="empty">No activity yet. Add your first candidate to get started.</div>
+      </div>
+    </section>
+
+    <!-- PIPELINE -->
+    <section class="view hidden" id="view-pipeline">
+      <div class="page-head">
+        <div><h1>Pipeline</h1><p>Drag-free stage management</p></div>
+        <button class="btn btn-primary" onclick="openCand()">+ Add candidate</button>
+      </div>
+      <div class="pipeline" id="pipeline"></div>
+    </section>
+
+    <!-- CANDIDATES -->
+    <section class="view hidden" id="view-candidates">
+      <div class="page-head">
+        <div><h1>Candidates</h1><p>Your talent database</p></div>
+        <button class="btn btn-primary" onclick="openCand()">+ Add candidate</button>
+      </div>
+      <div class="panel">
+        <table class="tbl"><thead><tr><th>Name</th><th>Role</th><th>Stage</th><th>AI Score</th><th>Added</th></tr></thead><tbody id="candList"></tbody></table>
+        <div id="candEmpty" class="empty">No candidates yet.</div>
+      </div>
+    </section>
+
+    <!-- JOBS -->
+    <section class="view hidden" id="view-jobs">
+      <div class="page-head">
+        <div><h1>Jobs</h1><p>Open roles & aggregation</p></div>
+        <button class="btn btn-primary" onclick="openJob()">+ Add job</button>
+      </div>
+      <div class="panel">
+        <table class="tbl"><thead><tr><th>Title</th><th>Company</th><th>Location</th><th>Status</th><th>Added</th></tr></thead><tbody id="jobList"></tbody></table>
+        <div id="jobEmpty" class="empty">No jobs yet.</div>
+      </div>
+    </section>
+
+    <!-- AI -->
+    <section class="view hidden" id="view-ai">
+      <div class="page-head">
+        <div><h1>AI Tools</h1><p>Recruitment superpowers</p></div>
+      </div>
+      <div class="panel">
+        <h2>Resume Scorer</h2>
+        <p style="color:rgba(255,255,255,.55);font-size:13px;margin-bottom:16px">Paste a resume and a job description to get an instant AI match score.</p>
+        <div class="field"><label>Job description</label><textarea id="aiJob" rows="4" placeholder="We're looking for a senior..."></textarea></div>
+        <div class="field"><label>Resume / candidate summary</label><textarea id="aiRes" rows="6" placeholder="John Smith, 8 years experience..."></textarea></div>
+        <button class="btn btn-primary" style="width:auto" onclick="scoreResume()">Score match</button>
+        <div id="aiResult" class="hidden" style="margin-top:20px;padding:20px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.3);border-radius:12px"></div>
+      </div>
+      <div class="panel">
+        <h2>Outreach Generator</h2>
+        <p style="color:rgba(255,255,255,.55);font-size:13px;margin-bottom:16px">Generate a personalised outreach message.</p>
+        <div class="field"><label>Candidate name</label><input id="outName" placeholder="Sarah"></div>
+        <div class="field"><label>Role you're pitching</label><input id="outRole" placeholder="Senior Product Designer at Acme"></div>
+        <button class="btn btn-primary" style="width:auto" onclick="genOutreach()">Generate message</button>
+        <div id="outResult" class="hidden" style="margin-top:20px;padding:20px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.3);border-radius:12px;white-space:pre-wrap;font-size:14px;line-height:1.6"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- CANDIDATE MODAL -->
+<div class="modal-bg" id="candModal">
+  <div class="modal">
+    <h2>New candidate</h2>
+    <p class="sub">Add someone to your pipeline</p>
+    <div class="field"><label>Full name *</label><input id="cName"></div>
+    <div class="field"><label>Email</label><input id="cEmail" type="email"></div>
+    <div class="field"><label>Current title</label><input id="cTitle"></div>
+    <div class="field"><label>Location</label><input id="cLoc"></div>
+    <div class="field"><label>Stage</label><select id="cStage"><option value="new">New</option><option value="screening">Screening</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="hired">Hired</option><option value="rejected">Rejected</option></select></div>
+    <div class="field"><label>Notes</label><textarea id="cNotes" rows="3"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeCand()">Cancel</button>
+      <button class="btn btn-primary" style="width:auto" onclick="saveCand()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- JOB MODAL -->
+<div class="modal-bg" id="jobModal">
+  <div class="modal">
+    <h2>New job</h2>
+    <p class="sub">Add an open role</p>
+    <div class="field"><label>Title *</label><input id="jTitle"></div>
+    <div class="field"><label>Company</label><input id="jCompany"></div>
+    <div class="field"><label>Location</label><input id="jLoc"></div>
+    <div class="field"><label>Description</label><textarea id="jDesc" rows="4"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeJob()">Cancel</button>
+      <button class="btn btn-primary" style="width:auto" onclick="saveJob()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL='https://jetpyyyypyixszfvrnle.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpldHB5eXl5cHlpeHN6ZnZybmxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMzEyMzUsImV4cCI6MjA5MTYwNzIzNX0.0IPrSOtN2BWJLYkJuuenktwvIyfn05bSvUgwvMeyAgY';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let user=null,mode='signin',candidates=[],jobs=[];
+const STAGES=['new','screening','interview','offer','hired','rejected'];
+
+// AUTH
+const $=id=>document.getElementById(id);
+const show=(el,ok,msg)=>{el.textContent=msg;el.classList.remove('hidden')};
+const hide=el=>el.classList.add('hidden');
+
+function setMode(m){
+  mode=m;
+  $('authBtn').textContent=m==='signin'?'Sign in':'Create account';
+  $('authSub').textContent=m==='signin'?'Sign in to your workspace':'Create your workspace';
+  $('authSwitchText').textContent=m==='signin'?"Don't have an account?":'Already have an account?';
+  $('authSwitch').textContent=m==='signin'?'Sign up':'Sign in';
+}
+$('authSwitch').onclick=()=>setMode(mode==='signin'?'signup':'signin');
+
+$('authBtn').onclick=async()=>{
+  hide($('authErr'));hide($('authOk'));
+  const email=$('authEmail').value.trim(),pwd=$('authPwd').value;
+  if(!email||!pwd){return show($('authErr'),0,'Email and password required')}
+  $('authBtn').disabled=true;$('authBtn').textContent='Please wait...';
+  try{
+    const fn=mode==='signin'?'signInWithPassword':'signUp';
+    const{data,error}=await sb.auth[fn]({email,password:pwd});
+    if(error)throw error;
+    if(mode==='signup'&&!data.session){show($('authOk'),1,'Check your email to confirm your account.');}
+    else if(data.session){await initApp();}
+  }catch(e){show($('authErr'),0,e.message)}
+  finally{$('authBtn').disabled=false;$('authBtn').textContent=mode==='signin'?'Sign in':'Create account';}
+};
+
+// URL ?signup=1
+if(new URLSearchParams(location.search).get('signup'))setMode('signup');
+
+// SESSION
+(async()=>{
+  const{data}=await sb.auth.getSession();
+  if(data.session){await initApp();}
+})();
+
+async function initApp(){
+  const{data}=await sb.auth.getUser();
+  user=data.user;
+  $('userEmail').textContent=user.email;
+  $('auth').style.display='none';
+  $('app').classList.add('active');
+  await loadData();
+  renderAll();
+}
+
+$('signOut').onclick=async()=>{
+  await sb.auth.signOut();
+  location.reload();
+};
+
+// NAV
+document.querySelectorAll('.nav-item').forEach(n=>{
+  n.onclick=()=>{
+    document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+    n.classList.add('active');
+    document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
+    $('view-'+n.dataset.view).classList.remove('hidden');
+  };
+});
+
+// DATA
+async function loadData(){
+  const c=await sb.from('candidates').select('*').eq('user_id',user.id).order('created_at',{ascending:false});
+  candidates=c.data||[];
+  const j=await sb.from('jobs').select('*').eq('user_id',user.id).order('created_at',{ascending:false});
+  jobs=j.data||[];
+}
+
+function renderAll(){renderStats();renderPipeline();renderCandTable();renderJobTable();}
+
+function renderStats(){
+  $('stCand').textContent=candidates.length;
+  $('stJobs').textContent=jobs.filter(j=>j.status==='open'||!j.status).length;
+  $('stPipe').textContent=candidates.filter(c=>c.stage&&!['hired','rejected'].includes(c.stage)).length;
+  $('stHired').textContent=candidates.filter(c=>c.stage==='hired').length;
+}
+
+function renderPipeline(){
+  const p=$('pipeline');p.innerHTML='';
+  STAGES.forEach(s=>{
+    const list=candidates.filter(c=>(c.stage||'new')===s);
+    const col=document.createElement('div');col.className='col';
+    col.innerHTML=`<div class="col-head"><span class="name">${s}</span><span class="count">${list.length}</span></div>`;
+    list.forEach(c=>{
+      const card=document.createElement('div');card.className='cand-card';
+      card.innerHTML=`<div class="name">${esc(c.full_name||c.name||'—')}</div><div class="title">${esc(c.current_title||'')}</div><div class="meta"><span>${esc(c.location||'')}</span>${c.ai_score?`<span class="score">${c.ai_score}</span>`:''}</div>`;
+      card.onclick=()=>moveStage(c);
+      col.appendChild(card);
+    });
+    p.appendChild(col);
+  });
+}
+
+async function moveStage(c){
+  const next=prompt('Move to stage ('+STAGES.join(', ')+'):',c.stage||'new');
+  if(!next||!STAGES.includes(next))return;
+  await sb.from('candidates').update({stage:next}).eq('id',c.id);
+  await loadData();renderAll();
+}
+
+function renderCandTable(){
+  const tb=$('candList');tb.innerHTML='';
+  $('candEmpty').style.display=candidates.length?'none':'block';
+  candidates.forEach(c=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><b>${esc(c.full_name||c.name||'—')}</b><br><span style="color:rgba(255,255,255,.5);font-size:12px">${esc(c.email||'')}</span></td><td>${esc(c.current_title||'')}</td><td><span class="tag tag-open">${esc(c.stage||'new')}</span></td><td>${c.ai_score||'—'}</td><td style="color:rgba(255,255,255,.5);font-size:12px">${fmtDate(c.created_at)}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+function renderJobTable(){
+  const tb=$('jobList');tb.innerHTML='';
+  $('jobEmpty').style.display=jobs.length?'none':'block';
+  jobs.forEach(j=>{
+    const st=j.status||'open';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><b>${esc(j.title)}</b></td><td>${esc(j.company||'')}</td><td>${esc(j.location||'')}</td><td><span class="tag tag-${st}">${st}</span></td><td style="color:rgba(255,255,255,.5);font-size:12px">${fmtDate(j.created_at)}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+// CANDIDATE MODAL
+function openCand(){$('candModal').classList.add('active')}
+function closeCand(){$('candModal').classList.remove('active');['cName','cEmail','cTitle','cLoc','cNotes'].forEach(i=>$(i).value='')}
+async function saveCand(){
+  const name=$('cName').value.trim();if(!name)return alert('Name required');
+  const payload={user_id:user.id,full_name:name,email:$('cEmail').value.trim()||null,current_title:$('cTitle').value.trim()||null,location:$('cLoc').value.trim()||null,stage:$('cStage').value,notes:$('cNotes').value.trim()||null,ai_score:Math.floor(60+Math.random()*40)};
+  const{error}=await sb.from('candidates').insert(payload);
+  if(error)return alert(error.message);
+  await sb.from('activity_log').insert({user_id:user.id,action:'candidate_added',details:{name}});
+  closeCand();await loadData();renderAll();
+}
+
+// JOB MODAL
+function openJob(){$('jobModal').classList.add('active')}
+function closeJob(){$('jobModal').classList.remove('active');['jTitle','jCompany','jLoc','jDesc'].forEach(i=>$(i).value='')}
+async function saveJob(){
+  const title=$('jTitle').value.trim();if(!title)return alert('Title required');
+  const payload={user_id:user.id,title,company:$('jCompany').value.trim()||null,location:$('jLoc').value.trim()||null,description:$('jDesc').value.trim()||null,status:'open',source:'manual'};
+  const{error}=await sb.from('jobs').insert(payload);
+  if(error)return alert(error.message);
+  closeJob();await loadData();renderAll();
+}
+
+// AI (local heuristic — no API key needed)
+function scoreResume(){
+  const job=$('aiJob').value.toLowerCase(),res=$('aiRes').value.toLowerCase();
+  if(!job||!res)return alert('Fill both fields');
+  const jobWords=[...new Set(job.match(/\b[a-z]{4,}\b/g)||[])];
+  const resWords=new Set(res.match(/\b[a-z]{4,}\b/g)||[]);
+  const hits=jobWords.filter(w=>resWords.has(w));
+  const score=Math.min(98,Math.round((hits.length/Math.max(jobWords.length,1))*100)+15);
+  const r=$('aiResult');r.classList.remove('hidden');
+  r.innerHTML=`<div style="font-size:40px;font-weight:800;background:linear-gradient(135deg,#a78bfa,#60a5fa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">${score}/100</div><div style="color:rgba(255,255,255,.7);margin-top:8px;font-size:13px">Matched ${hits.length} of ${jobWords.length} key terms. Strong signals: ${hits.slice(0,6).join(', ')||'—'}.</div>`;
+}
+
+function genOutreach(){
+  const n=$('outName').value.trim()||'there',r=$('outRole').value.trim()||'an exciting role';
+  const msg=`Hi ${n},\n\nI came across your profile and was really impressed by your background. I'm currently hiring for ${r} and your experience feels like an exceptional match — particularly your recent work on scaling teams and shipping quality at pace.\n\nWould you be open to a quick 15-minute chat this week? Happy to work around your schedule and share more about the team, the product and what sets this role apart.\n\nLooking forward to hearing from you,\nThe RecruitDNA team`;
+  const el=$('outResult');el.classList.remove('hidden');el.textContent=msg;
+}
+
+// UTIL
+function esc(s){return(s==null?'':String(s)).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+function fmtDate(d){if(!d)return'';return new Date(d).toLocaleDateString()}
+</script>
+</body>
+</html>
