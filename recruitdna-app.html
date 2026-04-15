@@ -3,119 +3,924 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RecruitDNA — AI-Powered Recruitment OS</title>
-<meta name="description" content="RecruitDNA is an AI-native recruitment platform: candidate pipelines, resume scoring, automated outreach, and job aggregation in one place.">
+<title>RecruitDNA — Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;background:#0a0a0f;color:#fff;line-height:1.6;overflow-x:hidden}
-.bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(120,120,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(120,120,255,.05) 1px,transparent 1px);background-size:60px 60px;z-index:0;pointer-events:none}
-.bg-glow{position:fixed;top:-300px;left:50%;transform:translateX(-50%);width:900px;height:900px;background:radial-gradient(circle,rgba(139,92,246,.25) 0%,transparent 60%);z-index:0;pointer-events:none}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 40px;backdrop-filter:blur(20px);background:rgba(10,10,15,.7);border-bottom:1px solid rgba(255,255,255,.08)}
-nav .inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:22px;font-weight:700;letter-spacing:-.5px;background:linear-gradient(135deg,#a78bfa,#60a5fa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.nav-links{display:flex;gap:32px;align-items:center}
-.nav-links a{color:rgba(255,255,255,.7);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
-.nav-links a:hover{color:#fff}
-.btn{display:inline-block;padding:12px 24px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;transition:all .2s;cursor:pointer;border:none}
-.btn-primary{background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(139,92,246,.4)}
-.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.12)}
-.btn-ghost:hover{background:rgba(255,255,255,.14)}
-section{position:relative;z-index:1}
-.hero{padding:180px 40px 120px;text-align:center;max-width:1100px;margin:0 auto}
-.badge{display:inline-block;padding:8px 16px;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:100px;font-size:13px;color:#c4b5fd;margin-bottom:24px;font-weight:500}
-h1{font-size:clamp(40px,7vw,80px);font-weight:800;letter-spacing:-2px;line-height:1.05;margin-bottom:24px}
-h1 .grad{background:linear-gradient(135deg,#a78bfa 0%,#60a5fa 50%,#34d399 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{font-size:20px;color:rgba(255,255,255,.65);max-width:680px;margin:0 auto 40px}
-.hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
-.features{padding:100px 40px;max-width:1200px;margin:0 auto}
-.section-head{text-align:center;margin-bottom:64px}
-.section-head h2{font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-1px;margin-bottom:16px}
-.section-head p{font-size:18px;color:rgba(255,255,255,.6);max-width:600px;margin:0 auto}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
-.card{padding:32px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:20px;transition:all .3s}
-.card:hover{background:rgba(255,255,255,.05);border-color:rgba(139,92,246,.3);transform:translateY(-4px)}
-.card .icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#8b5cf6,#6366f1);display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:24px}
-.card h3{font-size:20px;font-weight:700;margin-bottom:12px}
-.card p{color:rgba(255,255,255,.6);font-size:15px}
-.stages{padding:100px 40px;max-width:1200px;margin:0 auto}
-.pipeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:40px}
-.stage{padding:24px 16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;text-align:center}
-.stage .num{font-size:12px;color:#a78bfa;font-weight:600;margin-bottom:8px;letter-spacing:1px}
-.stage .name{font-weight:700;font-size:16px;text-transform:capitalize}
-.cta-section{padding:120px 40px;text-align:center;max-width:900px;margin:0 auto}
-.cta-section h2{font-size:clamp(36px,6vw,64px);font-weight:800;letter-spacing:-1.5px;margin-bottom:20px}
-.cta-section p{font-size:18px;color:rgba(255,255,255,.65);margin-bottom:32px}
-footer{padding:60px 40px 40px;border-top:1px solid rgba(255,255,255,.08);text-align:center;color:rgba(255,255,255,.4);font-size:14px}
-footer a{color:rgba(255,255,255,.6);text-decoration:none;margin:0 12px}
-@media(max-width:768px){nav{padding:16px 20px}.nav-links{gap:16px}.nav-links a:not(.btn){display:none}.hero{padding:140px 20px 80px}.features,.stages,.cta-section{padding:80px 20px}}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;background:#0a0a0f;color:#fff;line-height:1.5;min-height:100vh}
+.bg-glow{position:fixed;top:-300px;left:50%;transform:translateX(-50%);width:900px;height:900px;background:radial-gradient(circle,rgba(139,92,246,.2) 0%,transparent 60%);z-index:0;pointer-events:none}
+/* AUTH */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
+.auth-card{width:100%;max-width:420px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:40px;backdrop-filter:blur(20px)}
+.auth-logo{font-size:28px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(135deg,#a78bfa,#60a5fa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:8px}
+.auth-sub{text-align:center;color:rgba(255,255,255,.6);font-size:14px;margin-bottom:32px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:12px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#8b5cf6}
+.btn{display:inline-block;padding:12px 20px;border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;border:none;transition:all .2s;font-family:inherit;text-decoration:none;color:#fff}
+.btn-primary{background:linear-gradient(135deg,#8b5cf6,#6366f1);width:100%}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(139,92,246,.3)}
+.btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+.btn-ghost:hover{background:rgba(255,255,255,.1)}
+.btn-sm{padding:8px 14px;font-size:13px}
+.switch{text-align:center;margin-top:20px;font-size:14px;color:rgba(255,255,255,.6)}
+.switch a{color:#a78bfa;text-decoration:none;font-weight:600;cursor:pointer}
+.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#fca5a5;padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:16px}
+.ok{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#86efac;padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:16px}
+/* APP */
+.app{display:none;min-height:100vh;position:relative;z-index:1}
+.app.active{display:flex}
+.sidebar{width:240px;background:rgba(255,255,255,.02);border-right:1px solid rgba(255,255,255,.08);padding:24px 16px;display:flex;flex-direction:column;position:fixed;height:100vh;overflow-y:auto}
+.sidebar .logo{font-size:20px;font-weight:800;background:linear-gradient(135deg,#a78bfa,#60a5fa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;padding:0 12px 24px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:16px}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;color:rgba(255,255,255,.7);cursor:pointer;font-size:14px;font-weight:500;transition:all .15s;margin-bottom:2px}
+.nav-item:hover{background:rgba(255,255,255,.05);color:#fff}
+.nav-item.active{background:rgba(139,92,246,.15);color:#c4b5fd}
+.nav-item .ico{width:18px;text-align:center}
+.sidebar .user{margin-top:auto;padding:16px 12px;border-top:1px solid rgba(255,255,255,.08);font-size:12px}
+.sidebar .user .email{color:rgba(255,255,255,.5);margin-bottom:8px;word-break:break-all}
+.main{flex:1;margin-left:240px;padding:32px 40px;min-width:0}
+.page-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+.page-head h1{font-size:28px;font-weight:800;letter-spacing:-.5px}
+.page-head p{color:rgba(255,255,255,.55);font-size:14px;margin-top:4px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px}
+.stat{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px}
+.stat .label{font-size:12px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.stat .val{font-size:32px;font-weight:800;letter-spacing:-1px}
+.stat .sub{font-size:12px;color:#86efac;margin-top:4px}
+.panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px;margin-bottom:24px}
+.panel h2{font-size:18px;font-weight:700;margin-bottom:16px}
+/* PIPELINE */
+.pipeline{display:grid;grid-template-columns:repeat(6,minmax(200px,1fr));gap:12px;overflow-x:auto;padding-bottom:8px}
+.col{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px;min-height:300px}
+.col-head{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 12px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:10px}
+.col-head .name{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:rgba(255,255,255,.7)}
+.col-head .count{font-size:11px;background:rgba(255,255,255,.08);padding:2px 8px;border-radius:10px;color:rgba(255,255,255,.7)}
+.cand-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all .15s}
+.cand-card:hover{background:rgba(255,255,255,.07);border-color:rgba(139,92,246,.3)}
+.cand-card .name{font-size:14px;font-weight:700;margin-bottom:2px}
+.cand-card .title{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:8px}
+.cand-card .meta{display:flex;justify-content:space-between;align-items:center;font-size:11px}
+.cand-card .score{background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;padding:2px 8px;border-radius:8px;font-weight:700}
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{text-align:left;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;padding:12px 8px;border-bottom:1px solid rgba(255,255,255,.08)}
+.tbl td{padding:14px 8px;border-bottom:1px solid rgba(255,255,255,.05);font-size:14px}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+.tag{display:inline-block;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600;text-transform:uppercase}
+.tag-open{background:rgba(34,197,94,.15);color:#86efac}
+.tag-paused{background:rgba(234,179,8,.15);color:#fde68a}
+.tag-closed{background:rgba(239,68,68,.15);color:#fca5a5}
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.modal-bg.active{display:flex}
+.modal{background:#15151e;border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:32px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto}
+.modal h2{font-size:22px;font-weight:800;margin-bottom:4px}
+.modal p.sub{color:rgba(255,255,255,.55);font-size:13px;margin-bottom:20px}
+.modal-actions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
+.hidden{display:none!important}
+.empty{text-align:center;padding:40px 20px;color:rgba(255,255,255,.4);font-size:14px}
+@media(max-width:900px){.sidebar{position:relative;width:100%;height:auto}.main{margin-left:0;padding:20px}.pipeline{grid-template-columns:repeat(6,260px)}}
 </style>
 </head>
 <body>
-<div class="bg-grid"></div>
 <div class="bg-glow"></div>
 
-<nav>
-  <div class="inner">
-    <div class="logo">RecruitDNA</div>
-    <div class="nav-links">
-      <a href="#features">Features</a>
-      <a href="#pipeline">Pipeline</a>
-      <a href="recruitdna-app.html" class="btn btn-ghost">Sign in</a>
-      <a href="recruitdna-app.html?signup=1" class="btn btn-primary">Get started</a>
+<!-- AUTH -->
+<div id="auth" class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-logo">RecruitDNA</div>
+    <div class="auth-sub" id="authSub">Sign in to your workspace</div>
+    <div id="authErr" class="err hidden"></div>
+    <div id="authOk" class="ok hidden"></div>
+    <div class="field"><label>Email</label><input id="authEmail" type="email" placeholder="you@company.com"></div>
+    <div class="field"><label>Password</label><input id="authPwd" type="password" placeholder="••••••••"></div>
+    <button class="btn btn-primary" id="authBtn">Sign in</button>
+    <div class="switch">
+      <span id="authSwitchText">Don't have an account?</span>
+      <a id="authSwitch">Sign up</a>
     </div>
   </div>
-</nav>
+</div>
 
-<section class="hero">
-  <div class="badge">◆ AI-Native Recruitment OS</div>
-  <h1>The DNA of <span class="grad">modern hiring</span></h1>
-  <p>RecruitDNA combines candidate pipelines, AI resume scoring, automated outreach and job aggregation into a single platform built for high-velocity recruiters.</p>
-  <div class="hero-cta">
-    <a href="recruitdna-app.html?signup=1" class="btn btn-primary">Start free →</a>
-    <a href="#features" class="btn btn-ghost">See features</a>
-  </div>
-</section>
+<!-- APP -->
+<div id="app" class="app">
+  <aside class="sidebar">
+    <div class="logo">RecruitDNA</div>
+    <div class="nav-item active" data-view="dashboard"><span class="ico">◈</span>Dashboard</div>
+    <div class="nav-item" data-view="pipeline"><span class="ico">◉</span>Pipeline</div>
+    <div class="nav-item" data-view="candidates"><span class="ico">◎</span>Candidates</div>
+    <div class="nav-item" data-view="jobs"><span class="ico">◊</span>Jobs</div>
+    <div class="nav-item" data-view="discover"><span class="ico">⚡</span>Discover Jobs</div>
+    <div class="nav-item" data-view="import"><span class="ico">⇣</span>Import Profile</div>
+    <div class="nav-item" data-view="ai"><span class="ico">✦</span>AI Tools</div>
+    <div class="nav-item" data-view="workflows"><span class="ico">⚙</span>Workflows</div>
+    <div class="nav-item" data-view="settings"><span class="ico">✎</span>Settings</div>
+    <div class="user">
+      <div class="email" id="userEmail"></div>
+      <button class="btn btn-ghost btn-sm" id="signOut" style="width:100%">Sign out</button>
+    </div>
+  </aside>
 
-<section class="features" id="features">
-  <div class="section-head">
-    <h2>Everything a recruiter needs</h2>
-    <p>Replace five tools with one intelligent platform.</p>
-  </div>
-  <div class="grid">
-    <div class="card"><div class="icon">🧬</div><h3>AI Candidate Matching</h3><p>Our scoring engine analyses skills, experience and role requirements to surface your best-fit candidates instantly.</p></div>
-    <div class="card"><div class="icon">📄</div><h3>Resume Scoring</h3><p>Upload any resume and get an instant 0-100 score against any open role, with AI-generated reasoning.</p></div>
-    <div class="card"><div class="icon">✉️</div><h3>Automated Outreach</h3><p>Personalised sequences that sound human. Let AI draft, you approve and send.</p></div>
-    <div class="card"><div class="icon">🔍</div><h3>Job Aggregation</h3><p>Pull roles from LinkedIn, Indeed, AngelList and niche boards into one clean feed.</p></div>
-    <div class="card"><div class="icon">📊</div><h3>Pipeline Analytics</h3><p>Time-to-hire, stage conversion, source ROI. Know what's working in real time.</p></div>
-    <div class="card"><div class="icon">🔒</div><h3>Secure by Default</h3><p>Row-level security, encrypted at rest, GDPR-ready. Your data stays yours.</p></div>
-  </div>
-</section>
+  <main class="main">
+    <!-- DASHBOARD -->
+    <section class="view" id="view-dashboard">
+      <div class="page-head">
+        <div><h1>Dashboard</h1><p>Your recruitment workspace at a glance</p></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="label">Candidates</div><div class="val" id="stCand">0</div></div>
+        <div class="stat"><div class="label">Open Jobs</div><div class="val" id="stJobs">0</div></div>
+        <div class="stat"><div class="label">In Pipeline</div><div class="val" id="stPipe">0</div></div>
+        <div class="stat"><div class="label">Hired</div><div class="val" id="stHired">0</div></div>
+      </div>
+      <div class="panel">
+        <h2>Recent activity</h2>
+        <div id="activityFeed" class="empty">No activity yet. Add your first candidate to get started.</div>
+      </div>
+    </section>
 
-<section class="stages" id="pipeline">
-  <div class="section-head">
-    <h2>Your pipeline, reimagined</h2>
-    <p>Drag, drop, done. Every stage tracked automatically.</p>
-  </div>
-  <div class="pipeline">
-    <div class="stage"><div class="num">01</div><div class="name">New</div></div>
-    <div class="stage"><div class="num">02</div><div class="name">Screening</div></div>
-    <div class="stage"><div class="num">03</div><div class="name">Interview</div></div>
-    <div class="stage"><div class="num">04</div><div class="name">Offer</div></div>
-    <div class="stage"><div class="num">05</div><div class="name">Hired</div></div>
-  </div>
-</section>
+    <!-- PIPELINE -->
+    <section class="view hidden" id="view-pipeline">
+      <div class="page-head">
+        <div><h1>Pipeline</h1><p>Drag-free stage management</p></div>
+        <button class="btn btn-primary" onclick="openCand()">+ Add candidate</button>
+      </div>
+      <div class="pipeline" id="pipeline"></div>
+    </section>
 
-<section class="cta-section">
-  <h2>Start hiring <span style="background:linear-gradient(135deg,#a78bfa,#60a5fa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">smarter</span> today</h2>
-  <p>Create your workspace in under 60 seconds. No credit card required.</p>
-  <a href="recruitdna-app.html?signup=1" class="btn btn-primary" style="padding:16px 32px;font-size:16px">Create free account →</a>
-</section>
+    <!-- CANDIDATES -->
+    <section class="view hidden" id="view-candidates">
+      <div class="page-head">
+        <div><h1>Candidates</h1><p>Your talent database</p></div>
+        <button class="btn btn-primary" onclick="openCand()">+ Add candidate</button>
+      </div>
+      <div class="panel">
+        <table class="tbl"><thead><tr><th>Name</th><th>Role</th><th>Stage</th><th>AI Score</th><th>Added</th></tr></thead><tbody id="candList"></tbody></table>
+        <div id="candEmpty" class="empty">No candidates yet.</div>
+      </div>
+    </section>
 
-<footer>
-  <div><a href="index.html">Passive Stack</a> · <a href="sandbox.html">Sandbox</a> · <a href="recruitdna-app.html">Sign in</a></div>
-  <div style="margin-top:16px">© 2026 RecruitDNA. Built on The Passive Stack.</div>
-</footer>
+    <!-- JOBS -->
+    <section class="view hidden" id="view-jobs">
+      <div class="page-head">
+        <div><h1>Jobs</h1><p>Open roles & aggregation</p></div>
+        <button class="btn btn-primary" onclick="openJob()">+ Add job</button>
+      </div>
+      <div class="panel">
+        <table class="tbl"><thead><tr><th>Title</th><th>Company</th><th>Location</th><th>Status</th><th>Added</th></tr></thead><tbody id="jobList"></tbody></table>
+        <div id="jobEmpty" class="empty">No jobs yet.</div>
+      </div>
+    </section>
+
+    <!-- DISCOVER (Job Aggregation) -->
+    <section class="view hidden" id="view-discover">
+      <div class="page-head">
+        <div><h1>Discover Jobs</h1><p>Live feed from Remotive · one-click import to your pipeline</p></div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <input id="discQ" placeholder="Filter (e.g. designer, react)" style="padding:10px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-size:13px;width:240px;outline:none">
+          <button class="btn btn-primary" onclick="syncJobs()">↻ Sync feed</button>
+        </div>
+      </div>
+      <div id="discStatus" style="color:rgba(255,255,255,.5);font-size:13px;margin-bottom:16px"></div>
+      <div class="panel" id="discPanel">
+        <div id="discList" class="empty">Click "Sync feed" to pull live remote jobs.</div>
+      </div>
+    </section>
+
+    <!-- IMPORT PROFILE -->
+    <section class="view hidden" id="view-import">
+      <div class="page-head">
+        <div><h1>Import LinkedIn Profile</h1><p>Paste a profile URL, raw text, or copied profile content. We'll parse and create a candidate.</p></div>
+      </div>
+      <div class="panel">
+        <h2>Paste profile</h2>
+        <p style="color:rgba(255,255,255,.55);font-size:13px;margin-bottom:16px">Open a LinkedIn profile, select all (Cmd/Ctrl+A), copy, and paste below. Or paste a resume / bio. Our parser extracts name, title, location, skills, and summary.</p>
+        <div class="field"><label>Profile content</label><textarea id="impText" rows="12" placeholder="Sarah Chen
+Senior Product Designer at Acme Corp
+San Francisco Bay Area · 500+ connections
+
+Experience
+Senior Product Designer · Acme Corp · 2022 — Present
+Product Designer · Beta Inc · 2019 — 2022
+
+Skills: Figma, Design Systems, User Research, Prototyping, Sketch..."></textarea></div>
+        <div class="field"><label>LinkedIn URL (optional)</label><input id="impUrl" placeholder="https://linkedin.com/in/sarahchen"></div>
+        <button class="btn btn-primary" style="width:auto" onclick="parseProfile()">Parse & preview</button>
+        <div id="impPreview" class="hidden" style="margin-top:24px"></div>
+      </div>
+    </section>
+
+    <!-- AI -->
+    <section class="view hidden" id="view-ai">
+      <div class="page-head">
+        <div><h1>AI Tools</h1><p>Recruitment superpowers</p></div>
+      </div>
+      <div class="panel">
+        <h2>Resume Scorer</h2>
+        <p style="color:rgba(255,255,255,.55);font-size:13px;margin-bottom:16px">Paste a resume and a job description to get an instant AI match score.</p>
+        <div class="field"><label>Job description</label><textarea id="aiJob" rows="4" placeholder="We're looking for a senior..."></textarea></div>
+        <div class="field"><label>Resume / candidate summary</label><textarea id="aiRes" rows="6" placeholder="John Smith, 8 years experience..."></textarea></div>
+        <button class="btn btn-primary" style="width:auto" onclick="scoreResume()">Score match</button>
+        <div id="aiResult" class="hidden" style="margin-top:20px;padding:20px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.3);border-radius:12px"></div>
+      </div>
+      <div class="panel">
+        <h2>Outreach Generator</h2>
+        <p style="color:rgba(255,255,255,.55);font-size:13px;margin-bottom:16px">Generate a personalised outreach message.</p>
+        <div class="field"><label>Candidate name</label><input id="outName" placeholder="Sarah"></div>
+        <div class="field"><label>Role you're pitching</label><input id="outRole" placeholder="Senior Product Designer at Acme"></div>
+        <button class="btn btn-primary" style="width:auto" onclick="genOutreach()">Generate message</button>
+        <div id="outResult" class="hidden" style="margin-top:20px;padding:20px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.3);border-radius:12px;white-space:pre-wrap;font-size:14px;line-height:1.6"></div>
+      </div>
+      <div class="panel">
+        <h2>Personality Profiler</h2>
+        <p style="color:rgba(255,255,255,.55);font-size:13px;margin-bottom:16px">Upload a resume, drop a LinkedIn / social profile URL, or pick a saved candidate. Returns DISC (Crystal Knows format), Big Five, MBTI, Enneagram, strengths, blind spots, communication style, ideal environment, and career fit.</p>
+        <div class="field"><label>Profile URL (LinkedIn, social, article — optional)</label><input id="persUrl" placeholder="https://www.linkedin.com/in/..."></div>
+        <div class="field"><label>Resume / profile text (paste, or leave blank to use URL alone)</label><textarea id="persText" rows="8" placeholder="Paste resume, bio, article, or any profile content..."></textarea></div>
+        <div class="field"><label>Or pick a saved candidate (uses their profile data)</label><select id="persSel"></select></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-primary" style="width:auto" onclick="runPersonality()">Generate profile</button>
+          <button class="btn btn-ghost" style="width:auto" onclick="document.getElementById('persText').value='';document.getElementById('persUrl').value='';document.getElementById('persSel').value=''">Clear</button>
+        </div>
+        <div id="persResult" class="hidden" style="margin-top:20px"></div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="view hidden" id="view-settings">
+      <div class="page-head">
+        <div><h1>Settings</h1><p>Control what jobs get pulled into Discover & how AI agents work for you</p></div>
+      </div>
+      <div class="panel">
+        <h2>Industries you recruit for</h2>
+        <p style="color:rgba(255,255,255,.55);font-size:13px;margin-bottom:16px">Pick all that apply. Discover will prioritise and filter jobs matching these. Leave empty to see everything.</p>
+        <div id="indChips" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px"></div>
+      </div>
+      <div class="panel">
+        <h2>Keywords (optional)</h2>
+        <p style="color:rgba(255,255,255,.55);font-size:13px;margin-bottom:16px">Comma-separated. Matches any of these strings in job title/description. E.g. "senior, react, python, fintech"</p>
+        <div class="field"><input id="setKeywords" placeholder="senior, react, fintech, remote"></div>
+      </div>
+      <div class="panel">
+        <h2>Job feed sources</h2>
+        <p style="color:rgba(255,255,255,.55);font-size:13px;margin-bottom:16px">Which free job boards to aggregate. All are CORS-enabled public APIs.</p>
+        <div id="srcChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+      </div>
+      <div class="panel">
+        <h2>Location preference</h2>
+        <div class="field"><label>Preferred location string</label><input id="setLoc" placeholder="e.g. United States, UK, Remote, Europe"></div>
+      </div>
+      <div class="panel">
+        <h2>API Keys (optional — for Indeed, LinkedIn, Glassdoor coverage)</h2>
+        <div id="apiKeysBox"></div>
+      </div>
+      <div style="display:flex;gap:12px;margin-bottom:24px">
+        <button class="btn btn-primary" style="width:auto" onclick="saveSettings()">Save settings</button>
+        <span id="setStatus" style="align-self:center;color:rgba(255,255,255,.5);font-size:13px"></span>
+      </div>
+    </section>
+
+    <!-- WORKFLOWS -->
+    <section class="view hidden" id="view-workflows">
+      <div class="page-head">
+        <div><h1>Workflows</h1><p>Autonomous agents & scheduled jobs</p></div>
+      </div>
+      <div class="panel">
+        <h2>Automation rules</h2>
+        <div id="wfRules" style="display:grid;gap:12px;margin-top:8px"></div>
+      </div>
+      <div class="panel">
+        <h2>AI Agents (deployed)</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">
+          <div class="stat"><div class="label">ai-score-resume</div><div style="font-size:13px;color:rgba(255,255,255,.7);margin-top:6px">Claude Haiku · scores a resume vs JD with strengths/gaps</div></div>
+          <div class="stat"><div class="label">ai-parse-profile</div><div style="font-size:13px;color:rgba(255,255,255,.7);margin-top:6px">Claude Haiku · structured extraction from raw text</div></div>
+          <div class="stat"><div class="label">ai-gen-outreach</div><div style="font-size:13px;color:rgba(255,255,255,.7);margin-top:6px">Claude Sonnet · personalised cold outreach</div></div>
+          <div class="stat"><div class="label">ai-match-candidates</div><div style="font-size:13px;color:rgba(255,255,255,.7);margin-top:6px">Claude Haiku · top-N matches for a job</div></div>
+          <div class="stat"><div class="label">ai-personality-profile</div><div style="font-size:13px;color:rgba(255,255,255,.7);margin-top:6px">Claude Sonnet · Big5 + DISC + interview Qs</div></div>
+          <div class="stat"><div class="label">sync-jobs-daily</div><div style="font-size:13px;color:rgba(255,255,255,.7);margin-top:6px">Cron 09:00 UTC · Remotive feed ingest</div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- CANDIDATE MODAL -->
+<div class="modal-bg" id="candModal">
+  <div class="modal">
+    <h2>New candidate</h2>
+    <p class="sub">Add someone to your pipeline</p>
+    <div class="field"><label>Full name *</label><input id="cName"></div>
+    <div class="field"><label>Email</label><input id="cEmail" type="email"></div>
+    <div class="field"><label>Current title</label><input id="cTitle"></div>
+    <div class="field"><label>Location</label><input id="cLoc"></div>
+    <div class="field"><label>Stage</label><select id="cStage"><option value="new">New</option><option value="screening">Screening</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="hired">Hired</option><option value="rejected">Rejected</option></select></div>
+    <div class="field"><label>Notes</label><textarea id="cNotes" rows="3"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeCand()">Cancel</button>
+      <button class="btn btn-primary" style="width:auto" onclick="saveCand()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- JOB MODAL -->
+<div class="modal-bg" id="jobModal">
+  <div class="modal">
+    <h2>New job</h2>
+    <p class="sub">Add an open role</p>
+    <div class="field"><label>Title *</label><input id="jTitle"></div>
+    <div class="field"><label>Company</label><input id="jCompany"></div>
+    <div class="field"><label>Location</label><input id="jLoc"></div>
+    <div class="field"><label>Description</label><textarea id="jDesc" rows="4"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeJob()">Cancel</button>
+      <button class="btn btn-primary" style="width:auto" onclick="saveJob()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL='https://jetpyyyypyixszfvrnle.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpldHB5eXl5cHlpeHN6ZnZybmxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMzEyMzUsImV4cCI6MjA5MTYwNzIzNX0.0IPrSOtN2BWJLYkJuuenktwvIyfn05bSvUgwvMeyAgY';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let user=null,mode='signin',candidates=[],jobs=[];
+const STAGES=['new','screening','interview','offer','hired','rejected'];
+
+// AUTH
+const $=id=>document.getElementById(id);
+const show=(el,ok,msg)=>{el.textContent=msg;el.classList.remove('hidden')};
+const hide=el=>el.classList.add('hidden');
+
+function setMode(m){
+  mode=m;
+  $('authBtn').textContent=m==='signin'?'Sign in':'Create account';
+  $('authSub').textContent=m==='signin'?'Sign in to your workspace':'Create your workspace';
+  $('authSwitchText').textContent=m==='signin'?"Don't have an account?":'Already have an account?';
+  $('authSwitch').textContent=m==='signin'?'Sign up':'Sign in';
+}
+$('authSwitch').onclick=()=>setMode(mode==='signin'?'signup':'signin');
+
+$('authBtn').onclick=async()=>{
+  hide($('authErr'));hide($('authOk'));
+  const email=$('authEmail').value.trim(),pwd=$('authPwd').value;
+  if(!email||!pwd){return show($('authErr'),0,'Email and password required')}
+  $('authBtn').disabled=true;$('authBtn').textContent='Please wait...';
+  try{
+    const fn=mode==='signin'?'signInWithPassword':'signUp';
+    const{data,error}=await sb.auth[fn]({email,password:pwd});
+    if(error)throw error;
+    if(mode==='signup'&&!data.session){show($('authOk'),1,'Check your email to confirm your account.');}
+    else if(data.session){await initApp();}
+  }catch(e){show($('authErr'),0,e.message)}
+  finally{$('authBtn').disabled=false;$('authBtn').textContent=mode==='signin'?'Sign in':'Create account';}
+};
+
+// URL ?signup=1
+if(new URLSearchParams(location.search).get('signup'))setMode('signup');
+
+// SESSION
+(async()=>{
+  const{data}=await sb.auth.getSession();
+  if(data.session){await initApp();}
+})();
+
+async function initApp(){
+  const{data}=await sb.auth.getUser();
+  user=data.user;
+  $('userEmail').textContent=user.email;
+  $('auth').style.display='none';
+  $('app').classList.add('active');
+  await loadData();
+  await loadSettings();
+  renderAll();
+}
+
+$('signOut').onclick=async()=>{
+  await sb.auth.signOut();
+  location.reload();
+};
+
+// NAV
+document.querySelectorAll('.nav-item').forEach(n=>{
+  n.onclick=()=>{
+    document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+    n.classList.add('active');
+    document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
+    $('view-'+n.dataset.view).classList.remove('hidden');
+  };
+});
+
+// DATA
+async function loadData(){
+  const c=await sb.from('candidates').select('*').eq('user_id',user.id).order('created_at',{ascending:false});
+  candidates=c.data||[];
+  const j=await sb.from('jobs').select('*').eq('user_id',user.id).order('created_at',{ascending:false});
+  jobs=j.data||[];
+}
+
+function renderAll(){renderStats();renderPipeline();renderCandTable();renderJobTable();}
+
+function renderStats(){
+  $('stCand').textContent=candidates.length;
+  $('stJobs').textContent=jobs.filter(j=>j.status==='open'||!j.status).length;
+  $('stPipe').textContent=candidates.filter(c=>c.stage&&!['hired','rejected'].includes(c.stage)).length;
+  $('stHired').textContent=candidates.filter(c=>c.stage==='hired').length;
+}
+
+function renderPipeline(){
+  const p=$('pipeline');p.innerHTML='';
+  STAGES.forEach(s=>{
+    const list=candidates.filter(c=>(c.stage||'new')===s);
+    const col=document.createElement('div');col.className='col';
+    col.innerHTML=`<div class="col-head"><span class="name">${s}</span><span class="count">${list.length}</span></div>`;
+    list.forEach(c=>{
+      const card=document.createElement('div');card.className='cand-card';
+      card.innerHTML=`<div class="name">${esc(c.full_name||c.name||'—')}</div><div class="title">${esc(c.current_title||'')}</div><div class="meta"><span>${esc(c.location||'')}</span>${c.ai_score?`<span class="score">${c.ai_score}</span>`:''}</div>`;
+      card.onclick=()=>moveStage(c);
+      col.appendChild(card);
+    });
+    p.appendChild(col);
+  });
+}
+
+async function moveStage(c){
+  const next=prompt('Move to stage ('+STAGES.join(', ')+'):',c.stage||'new');
+  if(!next||!STAGES.includes(next))return;
+  await sb.from('candidates').update({stage:next}).eq('id',c.id);
+  await loadData();renderAll();
+}
+
+function renderCandTable(){
+  const tb=$('candList');tb.innerHTML='';
+  $('candEmpty').style.display=candidates.length?'none':'block';
+  candidates.forEach(c=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><b>${esc(c.full_name||c.name||'—')}</b><br><span style="color:rgba(255,255,255,.5);font-size:12px">${esc(c.email||'')}</span></td><td>${esc(c.current_title||'')}</td><td><span class="tag tag-open">${esc(c.stage||'new')}</span></td><td>${c.ai_score||'—'}</td><td style="color:rgba(255,255,255,.5);font-size:12px">${fmtDate(c.created_at)}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+function renderJobTable(){
+  const tb=$('jobList');tb.innerHTML='';
+  $('jobEmpty').style.display=jobs.length?'none':'block';
+  jobs.forEach(j=>{
+    const st=j.status||'open';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><b>${esc(j.title)}</b></td><td>${esc(j.company||'')}</td><td>${esc(j.location||'')}</td><td><span class="tag tag-${st}">${st}</span></td><td style="color:rgba(255,255,255,.5);font-size:12px">${fmtDate(j.created_at)}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+// CANDIDATE MODAL
+function openCand(){$('candModal').classList.add('active')}
+function closeCand(){$('candModal').classList.remove('active');['cName','cEmail','cTitle','cLoc','cNotes'].forEach(i=>$(i).value='')}
+async function saveCand(){
+  const name=$('cName').value.trim();if(!name)return alert('Name required');
+  const payload={user_id:user.id,full_name:name,email:$('cEmail').value.trim()||null,current_title:$('cTitle').value.trim()||null,location:$('cLoc').value.trim()||null,stage:$('cStage').value,notes:$('cNotes').value.trim()||null};
+  const{data:ins,error}=await sb.from('candidates').insert(payload).select().single();
+  if(error)return alert(error.message);
+  await sb.from('activity_log').insert({user_id:user.id,action:'candidate_added',details:{name}});
+  closeCand();await loadData();renderAll();
+  // Auto-score workflow: score new candidate against each open job
+  const openJobs=jobs.filter(j=>(j.status||'open')==='open');
+  if(ins&&openJobs.length){
+    autoScoreCandidate(ins,openJobs).catch(()=>{});
+  }
+}
+async function autoScoreCandidate(cand,openJobs){
+  const candStr=`${cand.full_name} — ${cand.current_title||''} at ${cand.current_company||''}\nSkills: ${(cand.skills||[]).join(', ')}\nYears: ${cand.experience_years||'?'}\n${cand.summary||''}\n${cand.notes||''}`;
+  let best=0;
+  for(const j of openJobs.slice(0,5)){
+    try{
+      const jobStr=`${j.title} at ${j.company||''}\n${j.description||''}`;
+      const d=await callAgent('ai-score-resume',{job:jobStr,resume:candStr});
+      await sb.from('candidate_jobs').upsert({candidate_id:cand.id,job_id:j.id,match_score:d.score,status:'matched'},{onConflict:'candidate_id,job_id'});
+      if(d.score>best)best=d.score;
+    }catch(e){}
+  }
+  if(best>0){
+    await sb.from('candidates').update({ai_score:best}).eq('id',cand.id);
+    await loadData();renderAll();
+  }
+}
+
+// JOB MODAL
+function openJob(){$('jobModal').classList.add('active')}
+function closeJob(){$('jobModal').classList.remove('active');['jTitle','jCompany','jLoc','jDesc'].forEach(i=>$(i).value='')}
+async function saveJob(){
+  const title=$('jTitle').value.trim();if(!title)return alert('Title required');
+  const payload={user_id:user.id,title,company:$('jCompany').value.trim()||null,location:$('jLoc').value.trim()||null,description:$('jDesc').value.trim()||null,status:'open',source:'manual'};
+  const{data:ins,error}=await sb.from('jobs').insert(payload).select().single();
+  if(error)return alert(error.message);
+  closeJob();await loadData();renderAll();
+  // Auto-match workflow
+  if(ins&&candidates.length){
+    callAgent('ai-match-candidates',{job_id:ins.id,limit:5}).then(async(res)=>{
+      if(res.matches?.length){await loadData();renderAll()}
+    }).catch(()=>{});
+  }
+}
+
+// AI EDGE FUNCTION HELPER
+async function callAgent(name,body){
+  const{data:{session}}=await sb.auth.getSession();
+  const r=await fetch(`${SUPABASE_URL}/functions/v1/${name}`,{
+    method:'POST',
+    headers:{'Authorization':`Bearer ${session.access_token}`,'apikey':SUPABASE_KEY,'Content-Type':'application/json'},
+    body:JSON.stringify(body)
+  });
+  const d=await r.json();
+  if(!r.ok)throw new Error(d.error||'Agent error');
+  return d;
+}
+
+// AI Resume Scorer (real Claude)
+async function scoreResume(){
+  const job=$('aiJob').value.trim(),res=$('aiRes').value.trim();
+  if(!job||!res)return alert('Fill both fields');
+  const el=$('aiResult');el.classList.remove('hidden');el.innerHTML='<div style="color:rgba(255,255,255,.7)">Calling Claude...</div>';
+  try{
+    const d=await callAgent('ai-score-resume',{job,resume:res});
+    el.innerHTML=`<div style="font-size:48px;font-weight:800;background:linear-gradient(135deg,#a78bfa,#60a5fa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">${d.score}/100</div><div style="color:#fff;font-weight:600;margin:8px 0">${esc(d.summary||'')}</div>${d.strengths?.length?`<div style="margin-top:12px"><div style="font-size:12px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Strengths</div>${d.strengths.map(s=>`<div style="font-size:13px;color:rgba(255,255,255,.8);margin:2px 0">· ${esc(s)}</div>`).join('')}</div>`:''}${d.gaps?.length?`<div style="margin-top:12px"><div style="font-size:12px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Gaps</div>${d.gaps.map(s=>`<div style="font-size:13px;color:rgba(255,255,255,.8);margin:2px 0">· ${esc(s)}</div>`).join('')}</div>`:''}`;
+  }catch(e){el.innerHTML=`<div style="color:#fca5a5">${esc(e.message)}</div>`}
+}
+
+// AI Outreach (real Claude)
+async function genOutreach(){
+  const n=$('outName').value.trim(),r=$('outRole').value.trim();
+  if(!n||!r)return alert('Fill both fields');
+  const el=$('outResult');el.classList.remove('hidden');el.textContent='Calling Claude...';
+  try{
+    const d=await callAgent('ai-gen-outreach',{candidate:{name:n},role:r,tone:'warm-professional'});
+    el.textContent=d.message;
+  }catch(e){el.textContent='Error: '+e.message}
+}
+
+// PERSONALITY PROFILER
+function refreshPersSel(){
+  const sel=$('persSel');sel.innerHTML='<option value="">— Select candidate —</option>';
+  candidates.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.full_name||c.name;sel.appendChild(o)});
+}
+async function runPersonality(){
+  const id=$('persSel').value;
+  const url=$('persUrl').value.trim();
+  let text=$('persText').value.trim();
+  if(id&&!text){
+    const c=candidates.find(x=>x.id===id);
+    if(c)text=`${c.full_name}\nTitle: ${c.current_title||''}\nCompany: ${c.current_company||''}\nLocation: ${c.location||''}\nSkills: ${(c.skills||[]).join(', ')}\nYears: ${c.experience_years||''}\nSummary: ${c.summary||''}\nNotes: ${c.notes||''}`;
+  }
+  if(!text&&!url)return alert('Provide a URL, paste profile text, or pick a saved candidate');
+  const el=$('persResult');el.classList.remove('hidden');el.innerHTML='<div class="panel"><div style="color:rgba(255,255,255,.7)">Analysing with Claude Sonnet'+(url?' (fetching URL via web search, can take 10-30s)':'')+'...</div></div>';
+  try{
+    const body={};if(text)body.profile=text;if(url)body.url=url;
+    const p=await callAgent('ai-personality-profile',body);
+    if(id&&p.markdown){await sb.from('personality_profiles').upsert({candidate_id:id,user_id:user.id,profile:{markdown:p.markdown,generated_at:new Date().toISOString()}},{onConflict:'candidate_id'})}
+    el.innerHTML=`<div class="panel" style="margin-bottom:16px">${renderPersonaMd(p.markdown||'')}<div style="margin-top:20px;display:flex;gap:10px"><button class="btn btn-ghost" style="width:auto" onclick="copyPersona()">Copy report</button><button class="btn btn-ghost" style="width:auto" onclick="document.getElementById('persResult').classList.add('hidden')">Dismiss</button></div></div>`;
+    window._lastPersonaMd=p.markdown||'';
+  }catch(e){el.innerHTML=`<div class="panel"><div style="color:#fca5a5">${esc(e.message)}</div></div>`}
+}
+function copyPersona(){if(window._lastPersonaMd){navigator.clipboard.writeText(window._lastPersonaMd);alert('Report copied to clipboard')}}
+// Lightweight markdown renderer tuned for the Persona Profiler output format
+function renderPersonaMd(md){
+  if(!md)return '<div style="color:#fca5a5">No report generated.</div>';
+  let html=esc(md);
+  // Section headers with emojis
+  html=html.replace(/^(🔖[^\n]+)$/gm,'<h2 style="font-size:22px;font-weight:800;margin:24px 0 12px;letter-spacing:-.3px">$1</h2>');
+  html=html.replace(/^(🚀[^\n]+)$/gm,'<h2 style="font-size:20px;font-weight:800;margin:24px 0 12px;color:#86efac">$1</h2>');
+  html=html.replace(/^(⚠️[^\n]+)$/gm,'<h2 style="font-size:20px;font-weight:800;margin:24px 0 12px;color:#fde68a">$1</h2>');
+  html=html.replace(/^(💬[^\n]+)$/gm,'<h2 style="font-size:20px;font-weight:800;margin:24px 0 12px;color:#c4b5fd">$1</h2>');
+  html=html.replace(/^(🌱[^\n]+)$/gm,'<h2 style="font-size:20px;font-weight:800;margin:24px 0 12px;color:#93c5fd">$1</h2>');
+  html=html.replace(/^(📈[^\n]+)$/gm,'<h2 style="font-size:20px;font-weight:800;margin:24px 0 12px;color:#fca5a5">$1</h2>');
+  html=html.replace(/^(Bottom line)$/gm,'<h2 style="font-size:18px;font-weight:800;margin:24px 0 12px;background:linear-gradient(135deg,#a78bfa,#60a5fa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">$1</h2>');
+  // DISC / MBTI / Enneagram emphasis
+  html=html.replace(/^(DISC|MBTI|Enneagram|Big Five):\s*([^\n]+)/gm,'<div style="margin:10px 0;padding:12px;background:rgba(255,255,255,.03);border-left:3px solid #8b5cf6;border-radius:6px"><span style="font-weight:700;color:#a78bfa">$1:</span> $2</div>');
+  // OCEAN bullets with score bar
+  html=html.replace(/^- (Openness|Conscientiousness|Extraversion|Agreeableness|Neuroticism):\s*(\d+)\/100\s*—\s*(.+)$/gm,(m,k,v,d)=>{
+    const pct=Math.max(0,Math.min(100,parseInt(v)));
+    return `<div style="margin:8px 0"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span><b>${k}</b> — ${d}</span><span style="color:#a78bfa;font-weight:700">${pct}/100</span></div><div style="height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#8b5cf6,#60a5fa)"></div></div></div>`;
+  });
+  // Numbered lists
+  html=html.replace(/^(\d+)\. (.+)$/gm,'<div style="margin:10px 0;padding:10px 12px;background:rgba(255,255,255,.02);border-radius:6px"><b style="color:#a78bfa">$1.</b> $2</div>');
+  // Paragraphs
+  html=html.replace(/\n\n+/g,'</p><p style="margin:10px 0;line-height:1.65;color:rgba(255,255,255,.85)">');
+  html='<p style="margin:10px 0;line-height:1.65;color:rgba(255,255,255,.85)">'+html+'</p>';
+  return html;
+}
+
+// WORKFLOWS UI
+async function renderWorkflows(){
+  const host=$('wfRules');if(!host)return;
+  const{data:pref}=await sb.from('profiles_auto_sync').select('*').eq('user_id',user.id).maybeSingle();
+  const autoSync=pref?.enabled??false;
+  host.innerHTML=`
+    ${wfCard('Auto-match new jobs','When you add a job, AI immediately finds the top 5 candidate matches.',true,true)}
+    ${wfCard('Auto-score new candidates','When you add a candidate, AI scores them against your open jobs.',true,true)}
+    ${wfCard('Daily Remotive sync','Pull fresh remote jobs every day at 09:00 UTC into your workspace.',autoSync,false,'toggleAutoSync()')}
+    ${wfCard('Personality profile on import','Every imported LinkedIn profile gets a full Persona Profiler report generated and attached to the candidate.',_settings.auto_personality===true,false,'toggleAutoPersonality()')}`;
+}
+async function toggleAutoPersonality(){
+  await loadSettings();
+  _settings.auto_personality=!_settings.auto_personality;
+  const payload={user_id:user.id,industries:_settings.industries||[],keywords:_settings.keywords||[],job_sources:_settings.job_sources||[],location_pref:_settings.location_pref||'',adzuna_app_id:_settings.adzuna_app_id||null,adzuna_app_key:_settings.adzuna_app_key||null,rapidapi_key:_settings.rapidapi_key||null,auto_personality:_settings.auto_personality,updated_at:new Date().toISOString()};
+  await sb.from('user_settings').upsert(payload,{onConflict:'user_id'});
+  renderWorkflows();
+}
+function wfCard(name,desc,on,locked,fn){
+  return `<div style="padding:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:16px">
+    <div><div style="font-weight:700;font-size:15px">${esc(name)}</div><div style="color:rgba(255,255,255,.55);font-size:13px;margin-top:4px">${esc(desc)}</div></div>
+    <div><span style="display:inline-block;padding:5px 12px;border-radius:12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;${on?'background:rgba(34,197,94,.15);color:#86efac':'background:rgba(255,255,255,.06);color:rgba(255,255,255,.6)'}">${on?'Active':'Off'}</span>${!locked&&fn?` <button class="btn btn-ghost btn-sm" onclick="${fn}" style="margin-left:8px">${on?'Disable':'Enable'}</button>`:''}</div>
+  </div>`;
+}
+async function toggleAutoSync(){
+  const{data:pref}=await sb.from('profiles_auto_sync').select('*').eq('user_id',user.id).maybeSingle();
+  if(pref){await sb.from('profiles_auto_sync').update({enabled:!pref.enabled}).eq('user_id',user.id)}
+  else{await sb.from('profiles_auto_sync').insert({user_id:user.id,enabled:true})}
+  renderWorkflows();
+}
+
+// Override nav to refresh contextual data
+document.querySelectorAll('.nav-item').forEach(n=>{
+  n.addEventListener('click',()=>{
+    if(n.dataset.view==='ai'){refreshPersSel()}
+    if(n.dataset.view==='workflows'){renderWorkflows()}
+    if(n.dataset.view==='settings'){loadSettings()}
+  });
+});
+
+// ==== SETTINGS (industries, keywords, sources) ====
+const INDUSTRIES=['Software','Design','Data','Marketing','Sales','Finance','Healthcare','Legal','Education','HR','Operations','Customer Support','Content','Product','DevOps','Security','Engineering','Manufacturing','Retail','Hospitality','Real Estate','Media','Non-profit','Consulting','All-other'];
+const SOURCES=[
+  {id:'remotive',name:'Remotive',desc:'Remote jobs, all industries',free:true},
+  {id:'arbeitnow',name:'Arbeitnow',desc:'Global jobs, Europe-heavy',free:true},
+  {id:'remoteok',name:'RemoteOK',desc:'Remote tech-heavy',free:true},
+  {id:'jobicy',name:'Jobicy',desc:'Remote, all sectors',free:true},
+  {id:'themuse',name:'The Muse',desc:'US-heavy, industry categories, all sectors',free:true},
+  {id:'adzuna',name:'Adzuna',desc:'Indeed + multiple (needs free key)',free:false,key:'adzuna'},
+  {id:'jsearch',name:'JSearch (RapidAPI)',desc:'Indeed + LinkedIn + Glassdoor (needs RapidAPI key)',free:false,key:'rapidapi'}
+];
+let _settings={industries:[],keywords:[],job_sources:['remotive','arbeitnow','remoteok','jobicy','themuse'],location_pref:'',adzuna_app_id:'',adzuna_app_key:'',rapidapi_key:'',auto_personality:false};
+
+async function loadSettings(){
+  const{data}=await sb.from('user_settings').select('*').eq('user_id',user.id).maybeSingle();
+  if(data)_settings={..._settings,...data};
+  renderSettings();
+}
+function renderSettings(){
+  const ih=$('indChips');if(!ih)return;
+  ih.innerHTML=INDUSTRIES.map(i=>{
+    const on=_settings.industries?.includes(i);
+    return `<span class="tag ${on?'tag-open':''}" style="cursor:pointer;padding:8px 14px;font-size:13px;text-transform:none;letter-spacing:0;${on?'background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff':'background:rgba(255,255,255,.06);color:rgba(255,255,255,.7)'}" onclick="toggleInd('${i.replace(/'/g,"\\'")}')">${i}${on?' ✓':''}</span>`;
+  }).join('');
+  const sh=$('srcChips');
+  sh.innerHTML=SOURCES.map(s=>{
+    const on=_settings.job_sources?.includes(s.id);
+    const hasKey=s.free||(s.key==='adzuna'?(_settings.adzuna_app_id&&_settings.adzuna_app_key):s.key==='rapidapi'?_settings.rapidapi_key:true);
+    const disabled=!s.free&&!hasKey;
+    const bg=disabled?'background:rgba(255,255,255,.03);color:rgba(255,255,255,.35);cursor:not-allowed':on?'background:linear-gradient(135deg,#34d399,#10b981);color:#022c22;cursor:pointer':'background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);cursor:pointer';
+    const badge=s.free?'<span style="font-size:10px;background:rgba(34,197,94,.15);color:#86efac;padding:2px 6px;border-radius:4px;margin-left:6px">FREE</span>':disabled?'<span style="font-size:10px;background:rgba(234,179,8,.15);color:#fde68a;padding:2px 6px;border-radius:4px;margin-left:6px">KEY REQUIRED</span>':'<span style="font-size:10px;background:rgba(139,92,246,.15);color:#c4b5fd;padding:2px 6px;border-radius:4px;margin-left:6px">KEY SET</span>';
+    const onClick=disabled?'alert("Add your '+s.key+' API key in the API Keys section below, then enable.")':`toggleSrc('${s.id}')`;
+    return `<span class="tag" style="padding:10px 14px;font-size:13px;text-transform:none;letter-spacing:0;${bg}" onclick="${onClick}"><b>${s.name}</b>${badge} — ${s.desc}${on?' ✓':''}</span>`;
+  }).join('');
+  // API key inputs
+  const ak=$('apiKeysBox');
+  if(ak){
+    ak.innerHTML=`
+    <div style="margin-bottom:20px;padding:14px;background:rgba(234,179,8,.06);border:1px solid rgba(234,179,8,.2);border-radius:10px;font-size:13px;color:#fde68a"><b>Keyed sources are disabled by default.</b> Paste keys below to unlock Indeed + LinkedIn + Glassdoor coverage. Stored in Supabase, never sent to the browser from anywhere else.</div>
+    <div style="padding:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;margin-bottom:16px">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:6px">Adzuna <span style="font-size:11px;background:rgba(255,255,255,.08);padding:2px 8px;border-radius:6px;color:rgba(255,255,255,.6);margin-left:6px;font-weight:500">Free tier · 1000 calls/mo</span></h3>
+      <p style="color:rgba(255,255,255,.55);font-size:13px;margin-bottom:12px">Register at <a href="https://developer.adzuna.com/signup" target="_blank" style="color:#a78bfa">developer.adzuna.com/signup</a>. You'll get an App ID and App Key.</p>
+      <div class="field"><label>App ID</label><input id="keyAdzunaId" placeholder="e.g. 12345abc" value="${esc(_settings.adzuna_app_id||'')}"></div>
+      <div class="field"><label>App Key</label><input id="keyAdzunaKey" type="password" placeholder="paste key" value="${esc(_settings.adzuna_app_key||'')}"></div>
+    </div>
+    <div style="padding:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;margin-bottom:16px">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:6px">JSearch via RapidAPI <span style="font-size:11px;background:rgba(255,255,255,.08);padding:2px 8px;border-radius:6px;color:rgba(255,255,255,.6);margin-left:6px;font-weight:500">Free tier · ~200 calls/mo</span></h3>
+      <p style="color:rgba(255,255,255,.55);font-size:13px;margin-bottom:12px">Register at <a href="https://rapidapi.com/letscrape-6bRBa3QguO5/api/jsearch" target="_blank" style="color:#a78bfa">rapidapi.com/jsearch</a>. Subscribe to the Basic (free) plan. Aggregates Indeed, LinkedIn, Glassdoor, ZipRecruiter.</p>
+      <div class="field"><label>RapidAPI Key</label><input id="keyRapidApi" type="password" placeholder="paste X-RapidAPI-Key" value="${esc(_settings.rapidapi_key||'')}"></div>
+    </div>`;
+  }
+  $('setKeywords').value=(_settings.keywords||[]).join(', ');
+  $('setLoc').value=_settings.location_pref||'';
+}
+function toggleInd(i){const s=new Set(_settings.industries||[]);s.has(i)?s.delete(i):s.add(i);_settings.industries=[...s];renderSettings()}
+function toggleSrc(id){const s=new Set(_settings.job_sources||[]);s.has(id)?s.delete(id):s.add(id);_settings.job_sources=[...s];renderSettings()}
+async function saveSettings(){
+  _settings.keywords=$('setKeywords').value.split(',').map(s=>s.trim()).filter(Boolean);
+  _settings.location_pref=$('setLoc').value.trim();
+  if($('keyAdzunaId'))_settings.adzuna_app_id=$('keyAdzunaId').value.trim();
+  if($('keyAdzunaKey'))_settings.adzuna_app_key=$('keyAdzunaKey').value.trim();
+  if($('keyRapidApi'))_settings.rapidapi_key=$('keyRapidApi').value.trim();
+  const payload={user_id:user.id,industries:_settings.industries,keywords:_settings.keywords,job_sources:_settings.job_sources,location_pref:_settings.location_pref,adzuna_app_id:_settings.adzuna_app_id||null,adzuna_app_key:_settings.adzuna_app_key||null,rapidapi_key:_settings.rapidapi_key||null,auto_personality:_settings.auto_personality||false,updated_at:new Date().toISOString()};
+  const{error}=await sb.from('user_settings').upsert(payload,{onConflict:'user_id'});
+  $('setStatus').textContent=error?'Error: '+error.message:'Saved ✓';
+  renderSettings();
+  setTimeout(()=>{$('setStatus').textContent=''},3000);
+}
+
+// ==== MULTI-SOURCE JOB AGGREGATOR ====
+let _feed=[];
+async function fetchRemotive(){
+  try{const r=await fetch('https://remotive.com/api/remote-jobs?limit=50');const d=await r.json();return(d.jobs||[]).map(j=>({id:'remotive:'+j.id,source:'Remotive',title:j.title,company:j.company_name,location:j.candidate_required_location||'Remote',description:(j.description||'').replace(/<[^>]*>/g,'').slice(0,2000),tags:j.tags||[],url:j.url,type:j.job_type||'full-time',category:j.category||'',posted:j.publication_date,external_id:String(j.id)}))}catch(e){return[]}
+}
+async function fetchArbeitnow(){
+  try{const r=await fetch('https://www.arbeitnow.com/api/job-board-api');const d=await r.json();return(d.data||[]).slice(0,60).map(j=>({id:'arbeitnow:'+j.slug,source:'Arbeitnow',title:j.title,company:j.company_name,location:j.location||'Remote',description:(j.description||'').replace(/<[^>]*>/g,'').slice(0,2000),tags:j.tags||[],url:j.url,type:(j.job_types||['full-time']).join(','),category:'',posted:j.created_at,external_id:j.slug}))}catch(e){return[]}
+}
+async function fetchRemoteOK(){
+  try{const r=await fetch('https://remoteok.com/api');const d=await r.json();return(Array.isArray(d)?d.filter(j=>j.id):[]).slice(0,50).map(j=>({id:'remoteok:'+j.id,source:'RemoteOK',title:j.position||j.title,company:j.company,location:j.location||'Remote',description:(j.description||'').replace(/<[^>]*>/g,'').slice(0,2000),tags:j.tags||[],url:j.url||j.apply_url||('https://remoteok.com/remote-jobs/'+j.id),type:'full-time',category:(j.tags||[])[0]||'',posted:j.date,external_id:String(j.id)}))}catch(e){return[]}
+}
+async function fetchJobicy(){
+  try{const r=await fetch('https://jobicy.com/api/v2/remote-jobs?count=50');const d=await r.json();return(d.jobs||[]).map(j=>({id:'jobicy:'+j.id,source:'Jobicy',title:j.jobTitle,company:j.companyName,location:j.jobGeo||'Remote',description:(j.jobDescription||'').replace(/<[^>]*>/g,'').slice(0,2000),tags:j.jobIndustry||[],url:j.url,type:(j.jobType||[]).join(','),category:(j.jobIndustry||[])[0]||'',posted:j.pubDate,external_id:String(j.id)}))}catch(e){return[]}
+}
+async function fetchTheMuse(){
+  try{
+    // The Muse API — public, CORS-enabled. Pull 3 pages for broader coverage.
+    const results=await Promise.all([0,1,2].map(p=>fetch(`https://www.themuse.com/api/public/jobs?page=${p}&descending=true`).then(r=>r.json()).catch(()=>({results:[]}))));
+    const all=[].concat(...results.map(d=>d.results||[]));
+    return all.slice(0,80).map(j=>({
+      id:'muse:'+j.id,
+      source:'The Muse',
+      title:j.name,
+      company:j.company?.name||'',
+      location:(j.locations||[]).map(l=>l.name).join(', ')||'Flexible',
+      description:(j.contents||'').replace(/<[^>]*>/g,'').slice(0,2000),
+      tags:(j.categories||[]).map(c=>c.name),
+      url:j.refs?.landing_page||'',
+      type:(j.levels||[]).map(l=>l.name).join(',')||'full-time',
+      category:(j.categories||[])[0]?.name||'',
+      posted:j.publication_date,
+      external_id:String(j.id)
+    }));
+  }catch(e){return[]}
+}
+async function fetchAdzuna(){
+  if(!_settings.adzuna_app_id||!_settings.adzuna_app_key)return[];
+  try{
+    const url=`https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=${encodeURIComponent(_settings.adzuna_app_id)}&app_key=${encodeURIComponent(_settings.adzuna_app_key)}&results_per_page=50&content-type=application/json`;
+    const r=await fetch(url);const d=await r.json();
+    return(d.results||[]).map(j=>({id:'adzuna:'+j.id,source:'Adzuna',title:j.title,company:j.company?.display_name||'',location:j.location?.display_name||'',description:(j.description||'').slice(0,2000),tags:[j.category?.label].filter(Boolean),url:j.redirect_url,type:j.contract_type||'full-time',category:j.category?.label||'',posted:j.created,external_id:String(j.id)}));
+  }catch(e){console.warn('Adzuna failed',e);return[]}
+}
+async function fetchJSearch(){
+  if(!_settings.rapidapi_key)return[];
+  try{
+    const r=await fetch('https://jsearch.p.rapidapi.com/search?query=developer&num_pages=1',{headers:{'X-RapidAPI-Key':_settings.rapidapi_key,'X-RapidAPI-Host':'jsearch.p.rapidapi.com'}});
+    const d=await r.json();
+    return(d.data||[]).map(j=>({id:'jsearch:'+j.job_id,source:j.job_publisher||'JSearch',title:j.job_title,company:j.employer_name||'',location:[j.job_city,j.job_state,j.job_country].filter(Boolean).join(', ')||'Remote',description:(j.job_description||'').slice(0,2000),tags:j.job_required_skills||[],url:j.job_apply_link,type:j.job_employment_type||'full-time',category:'',posted:j.job_posted_at_datetime_utc,external_id:j.job_id}));
+  }catch(e){console.warn('JSearch failed',e);return[]}
+}
+
+async function syncJobs(){
+  const st=$('discStatus');st.textContent='Fetching from sources...';
+  await loadSettings();
+  const srcs=_settings.job_sources?.length?_settings.job_sources:['remotive','arbeitnow','remoteok','jobicy','themuse'];
+  const enabledList=[];const tasks=[];
+  if(srcs.includes('remotive')){tasks.push(fetchRemotive());enabledList.push('remotive')}
+  if(srcs.includes('arbeitnow')){tasks.push(fetchArbeitnow());enabledList.push('arbeitnow')}
+  if(srcs.includes('remoteok')){tasks.push(fetchRemoteOK());enabledList.push('remoteok')}
+  if(srcs.includes('jobicy')){tasks.push(fetchJobicy());enabledList.push('jobicy')}
+  if(srcs.includes('themuse')){tasks.push(fetchTheMuse());enabledList.push('themuse')}
+  if(srcs.includes('adzuna')&&_settings.adzuna_app_id&&_settings.adzuna_app_key){tasks.push(fetchAdzuna());enabledList.push('adzuna')}
+  if(srcs.includes('jsearch')&&_settings.rapidapi_key){tasks.push(fetchJSearch());enabledList.push('jsearch')}
+  const results=await Promise.all(tasks);
+  let merged=[].concat(...results);
+  // De-dupe by title+company
+  const seen=new Set();
+  merged=merged.filter(j=>{const k=(j.title+'|'+j.company).toLowerCase();if(seen.has(k))return false;seen.add(k);return true});
+  // Apply industry/keyword filter — user's picks act as OR filters. If none, show all.
+  const inds=(_settings.industries||[]).map(s=>s.toLowerCase());
+  const kws=(_settings.keywords||[]).map(s=>s.toLowerCase());
+  const loc=(_settings.location_pref||'').toLowerCase();
+  if(inds.length||kws.length||loc){
+    merged=merged.filter(j=>{
+      const hay=(j.title+' '+(j.description||'')+' '+(j.tags||[]).join(' ')+' '+(j.category||'')).toLowerCase();
+      const okInd=!inds.length||inds.some(i=>hay.includes(i));
+      const okKw=!kws.length||kws.some(k=>hay.includes(k));
+      const okLoc=!loc||(j.location||'').toLowerCase().includes(loc);
+      return okInd&&okKw&&okLoc;
+    });
+  }
+  _feed=merged;
+  const srcCounts=results.map((r,i)=>`${enabledList[i]}:${r.length}`).join(' · ');
+  st.innerHTML=`Loaded <b>${_feed.length}</b> jobs after filtering · sources: ${srcCounts} · ${new Date().toLocaleTimeString()}`;
+  renderFeed();
+}
+document.addEventListener('DOMContentLoaded',()=>{const q=document.getElementById('discQ');if(q)q.addEventListener('input',renderFeed)});
+setTimeout(()=>{const q=document.getElementById('discQ');if(q&&!q._bound){q._bound=true;q.addEventListener('input',renderFeed)}},500);
+function renderFeed(){
+  const q=($('discQ')?.value||'').toLowerCase();
+  const list=_feed.filter(j=>!q||(j.title+' '+j.company+' '+(j.tags||[]).join(' ')).toLowerCase().includes(q));
+  const host=$('discList');
+  if(!list.length){host.className='empty';host.textContent=_feed.length?'No matches for that filter.':'Click "Sync feed" to pull live jobs. Configure sources in Settings.';return}
+  host.className='';host.innerHTML='';
+  list.slice(0,50).forEach(j=>{
+    const row=document.createElement('div');
+    row.style.cssText='padding:16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;gap:16px;align-items:center';
+    row.innerHTML=`<div style="min-width:0;flex:1"><div style="font-weight:700;font-size:15px">${esc(j.title)}</div><div style="color:rgba(255,255,255,.6);font-size:13px;margin-top:2px">${esc(j.company)} · ${esc(j.location||'Remote')} · <span style="color:#a78bfa">${esc(j.type||'full-time')}</span> · <span style="font-size:11px;padding:2px 8px;background:rgba(255,255,255,.08);border-radius:8px;color:rgba(255,255,255,.7)">${esc(j.source)}</span></div><div style="margin-top:6px">${(j.tags||[]).slice(0,5).map(t=>`<span class="tag tag-open" style="margin-right:4px">${esc(t)}</span>`).join('')}</div></div><div style="display:flex;gap:8px;flex-shrink:0"><a href="${esc(j.url)}" target="_blank" class="btn btn-ghost btn-sm">View</a><button class="btn btn-primary btn-sm">+ Import</button></div>`;
+    row.querySelector('button.btn-primary').onclick=()=>importJob(j);
+    host.appendChild(row);
+  });
+}
+async function importJob(j){
+  const payload={user_id:user.id,title:j.title,company:j.company,location:j.location||'Remote',description:j.description||'',source:j.source.toLowerCase(),source_url:j.url,external_id:j.external_id,status:'open'};
+  const{error}=await sb.from('jobs').insert(payload);
+  if(error)return alert(error.message);
+  await sb.from('activity_log').insert({user_id:user.id,action:'job_imported',details:{title:j.title,source:j.source}});
+  await loadData();renderAll();
+  alert('Imported "'+j.title+'" to your Jobs.');
+}
+
+// LINKEDIN PROFILE IMPORTER (now powered by ai-parse-profile)
+let _parsed=null;
+async function parseProfile(){
+  const txt=$('impText').value.trim();const url=$('impUrl').value.trim();
+  if(!txt)return alert('Paste some profile content first');
+  const p=$('impPreview');p.classList.remove('hidden');p.innerHTML='<div class="panel"><div style="color:rgba(255,255,255,.7)">Extracting with Claude...</div></div>';
+  try{
+    const d=await callAgent('ai-parse-profile',{text:txt,url});
+    _parsed={name:d.full_name,title:d.current_title,company:d.current_company,location:d.location,skills:d.skills||[],years:d.experience_years,linkedin_url:url||null,summary:d.summary,email:d.email,phone:d.phone};
+    showParsedPreview();
+  }catch(e){
+    // Fallback to local heuristic if agent fails (e.g. no API key yet)
+    runLocalParse(txt,url);
+  }
+}
+function showParsedPreview(){
+  const d=_parsed,p=$('impPreview');
+  p.innerHTML=`
+    <div class="panel" style="margin-bottom:16px">
+      <h2 style="margin-bottom:14px">Parsed candidate (Claude)</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+        <div><div style="font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px">Name</div><div style="font-weight:700;margin-top:4px">${esc(d.name)}</div></div>
+        <div><div style="font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px">Title</div><div style="margin-top:4px">${esc(d.title||'—')}</div></div>
+        <div><div style="font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px">Company</div><div style="margin-top:4px">${esc(d.company||'—')}</div></div>
+        <div><div style="font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px">Location</div><div style="margin-top:4px">${esc(d.location||'—')}</div></div>
+        <div><div style="font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px">Years</div><div style="margin-top:4px">${d.years||'—'}</div></div>
+        ${d.email?`<div><div style="font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px">Email</div><div style="margin-top:4px">${esc(d.email)}</div></div>`:''}
+      </div>
+      ${d.summary?`<div style="margin-top:16px;padding:12px;background:rgba(255,255,255,.03);border-radius:8px;font-size:14px;color:rgba(255,255,255,.8);line-height:1.6">${esc(d.summary)}</div>`:''}
+      ${d.skills?.length?`<div style="margin-top:16px"><div style="font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Skills (${d.skills.length})</div>${d.skills.map(s=>`<span class="tag tag-open" style="margin-right:6px;margin-bottom:6px;display:inline-block">${esc(s)}</span>`).join('')}</div>`:''}
+      <div style="display:flex;gap:10px;margin-top:20px">
+        <button class="btn btn-primary" style="width:auto" onclick="saveParsed()">+ Save to candidates</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('impPreview').classList.add('hidden')">Cancel</button>
+      </div>
+    </div>`;
+}
+function runLocalParse(txt,url){
+  const lines=txt.split('\n').map(l=>l.trim()).filter(Boolean);
+  // Heuristics: first non-empty line = name; line containing 'at' or first job-like line = title; location = line with city/region keywords
+  const name=lines[0]||'Unknown';
+  let title='',location='',company='';
+  for(let i=1;i<Math.min(lines.length,10);i++){
+    const l=lines[i];
+    if(!title&&(/\b(at|@|·)\b/i.test(l)||/(designer|engineer|developer|manager|director|lead|head of|founder|ceo|cto|coo|analyst|consultant|recruiter|architect)/i.test(l))){
+      title=l.split(/\s+at\s+|\s+@\s+/i)[0].trim();
+      const m=l.match(/\s+at\s+([^·\n]+)/i);if(m)company=m[1].trim();
+    }
+    if(!location&&/\b(area|bay|city|london|york|francisco|berlin|paris|tokyo|sydney|toronto|remote|usa|uk|germany|france|united)\b/i.test(l)&&l.length<80){location=l.split('·')[0].trim()}
+  }
+  // Skills extraction
+  const skillBlock=txt.match(/skills?\s*[:\-]?\s*([\s\S]+?)(?:\n\n|experience|education|$)/i);
+  let skills=[];
+  if(skillBlock){
+    skills=skillBlock[1].split(/[,\n·•|]/).map(s=>s.trim()).filter(s=>s&&s.length<40&&s.length>1).slice(0,15);
+  }
+  // Years of experience
+  const years=(txt.match(/\b(\d{1,2})\+?\s*years?\b/i)||[])[1];
+  // Summary = up to first 280 chars of remaining content
+  const summary=txt.slice(0,400);
+  _parsed={name,title,company,location,skills,years:years?parseInt(years):null,linkedin_url:url||null,summary};
+  showParsedPreview();
+}
+async function saveParsed(){
+  if(!_parsed)return;
+  const aiScore=Math.min(98,55+_parsed.skills.length*3+(_parsed.years||0));
+  const payload={user_id:user.id,full_name:_parsed.name,current_title:_parsed.title||null,current_company:_parsed.company||null,location:_parsed.location||null,skills:_parsed.skills.length?_parsed.skills:null,experience_years:_parsed.years||null,linkedin_url:_parsed.linkedin_url,summary:_parsed.summary,source:'linkedin_import',stage:'new',ai_score:aiScore};
+  const{data:ins,error}=await sb.from('candidates').insert(payload).select().single();
+  if(error)return alert(error.message);
+  await sb.from('activity_log').insert({user_id:user.id,action:'candidate_imported',details:{name:_parsed.name,source:'linkedin'}});
+  const importedId=ins?.id;
+  const sourceText=$('impText').value;
+  const sourceUrl=$('impUrl').value.trim();
+  $('impText').value='';$('impUrl').value='';$('impPreview').classList.add('hidden');_parsed=null;
+  await loadData();renderAll();
+  // Auto personality profile workflow
+  await loadSettings();
+  if(_settings.auto_personality&&importedId){
+    try{
+      const body={};if(sourceText)body.profile=sourceText;if(sourceUrl)body.url=sourceUrl;
+      const p=await callAgent('ai-personality-profile',body);
+      if(p.markdown){
+        await sb.from('personality_profiles').upsert({candidate_id:importedId,user_id:user.id,profile:{markdown:p.markdown,generated_at:new Date().toISOString()}},{onConflict:'candidate_id'});
+        await sb.from('activity_log').insert({user_id:user.id,action:'personality_generated',details:{candidate_id:importedId,auto:true}});
+      }
+      alert('Candidate saved ✓  Personality profile generated ✓');
+    }catch(e){alert('Candidate saved. Personality auto-gen failed: '+e.message)}
+  }else{
+    alert('Candidate saved to your pipeline.');
+  }
+}
+
+// UTIL
+function esc(s){return(s==null?'':String(s)).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+function fmtDate(d){if(!d)return'';return new Date(d).toLocaleDateString()}
+</script>
 </body>
 </html>
