@@ -270,6 +270,10 @@ Skills: Figma, Design Systems, User Research, Prototyping, Sketch..."></textarea
         <h2>Location preference</h2>
         <div class="field"><label>Preferred location string</label><input id="setLoc" placeholder="e.g. United States, UK, Remote, Europe"></div>
       </div>
+      <div class="panel">
+        <h2>API Keys (optional — for Indeed, LinkedIn, Glassdoor coverage)</h2>
+        <div id="apiKeysBox"></div>
+      </div>
       <div style="display:flex;gap:12px;margin-bottom:24px">
         <button class="btn btn-primary" style="width:auto" onclick="saveSettings()">Save settings</button>
         <span id="setStatus" style="align-self:center;color:rgba(255,255,255,.5);font-size:13px"></span>
@@ -638,12 +642,15 @@ document.querySelectorAll('.nav-item').forEach(n=>{
 // ==== SETTINGS (industries, keywords, sources) ====
 const INDUSTRIES=['Software','Design','Data','Marketing','Sales','Finance','Healthcare','Legal','Education','HR','Operations','Customer Support','Content','Product','DevOps','Security','Engineering','Manufacturing','Retail','Hospitality','Real Estate','Media','Non-profit','Consulting','All-other'];
 const SOURCES=[
-  {id:'remotive',name:'Remotive',desc:'Remote jobs, all industries'},
-  {id:'arbeitnow',name:'Arbeitnow',desc:'Global jobs, Europe-heavy'},
-  {id:'remoteok',name:'RemoteOK',desc:'Remote tech-heavy'},
-  {id:'jobicy',name:'Jobicy',desc:'Remote, all sectors'}
+  {id:'remotive',name:'Remotive',desc:'Remote jobs, all industries',free:true},
+  {id:'arbeitnow',name:'Arbeitnow',desc:'Global jobs, Europe-heavy',free:true},
+  {id:'remoteok',name:'RemoteOK',desc:'Remote tech-heavy',free:true},
+  {id:'jobicy',name:'Jobicy',desc:'Remote, all sectors',free:true},
+  {id:'themuse',name:'The Muse',desc:'US-heavy, industry categories, all sectors',free:true},
+  {id:'adzuna',name:'Adzuna',desc:'Indeed + multiple (needs free key)',free:false,key:'adzuna'},
+  {id:'jsearch',name:'JSearch (RapidAPI)',desc:'Indeed + LinkedIn + Glassdoor (needs RapidAPI key)',free:false,key:'rapidapi'}
 ];
-let _settings={industries:[],keywords:[],job_sources:['remotive','arbeitnow','remoteok','jobicy'],location_pref:''};
+let _settings={industries:[],keywords:[],job_sources:['remotive','arbeitnow','remoteok','jobicy','themuse'],location_pref:'',adzuna_app_id:'',adzuna_app_key:'',rapidapi_key:''};
 
 async function loadSettings(){
   const{data}=await sb.from('user_settings').select('*').eq('user_id',user.id).maybeSingle();
@@ -659,8 +666,30 @@ function renderSettings(){
   const sh=$('srcChips');
   sh.innerHTML=SOURCES.map(s=>{
     const on=_settings.job_sources?.includes(s.id);
-    return `<span class="tag" style="cursor:pointer;padding:10px 14px;font-size:13px;text-transform:none;letter-spacing:0;${on?'background:linear-gradient(135deg,#34d399,#10b981);color:#022c22':'background:rgba(255,255,255,.06);color:rgba(255,255,255,.7)'}" onclick="toggleSrc('${s.id}')"><b>${s.name}</b> — ${s.desc}${on?' ✓':''}</span>`;
+    const hasKey=s.free||(s.key==='adzuna'?(_settings.adzuna_app_id&&_settings.adzuna_app_key):s.key==='rapidapi'?_settings.rapidapi_key:true);
+    const disabled=!s.free&&!hasKey;
+    const bg=disabled?'background:rgba(255,255,255,.03);color:rgba(255,255,255,.35);cursor:not-allowed':on?'background:linear-gradient(135deg,#34d399,#10b981);color:#022c22;cursor:pointer':'background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);cursor:pointer';
+    const badge=s.free?'<span style="font-size:10px;background:rgba(34,197,94,.15);color:#86efac;padding:2px 6px;border-radius:4px;margin-left:6px">FREE</span>':disabled?'<span style="font-size:10px;background:rgba(234,179,8,.15);color:#fde68a;padding:2px 6px;border-radius:4px;margin-left:6px">KEY REQUIRED</span>':'<span style="font-size:10px;background:rgba(139,92,246,.15);color:#c4b5fd;padding:2px 6px;border-radius:4px;margin-left:6px">KEY SET</span>';
+    const onClick=disabled?'alert("Add your '+s.key+' API key in the API Keys section below, then enable.")':`toggleSrc('${s.id}')`;
+    return `<span class="tag" style="padding:10px 14px;font-size:13px;text-transform:none;letter-spacing:0;${bg}" onclick="${onClick}"><b>${s.name}</b>${badge} — ${s.desc}${on?' ✓':''}</span>`;
   }).join('');
+  // API key inputs
+  const ak=$('apiKeysBox');
+  if(ak){
+    ak.innerHTML=`
+    <div style="margin-bottom:20px;padding:14px;background:rgba(234,179,8,.06);border:1px solid rgba(234,179,8,.2);border-radius:10px;font-size:13px;color:#fde68a"><b>Keyed sources are disabled by default.</b> Paste keys below to unlock Indeed + LinkedIn + Glassdoor coverage. Stored in Supabase, never sent to the browser from anywhere else.</div>
+    <div style="padding:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;margin-bottom:16px">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:6px">Adzuna <span style="font-size:11px;background:rgba(255,255,255,.08);padding:2px 8px;border-radius:6px;color:rgba(255,255,255,.6);margin-left:6px;font-weight:500">Free tier · 1000 calls/mo</span></h3>
+      <p style="color:rgba(255,255,255,.55);font-size:13px;margin-bottom:12px">Register at <a href="https://developer.adzuna.com/signup" target="_blank" style="color:#a78bfa">developer.adzuna.com/signup</a>. You'll get an App ID and App Key.</p>
+      <div class="field"><label>App ID</label><input id="keyAdzunaId" placeholder="e.g. 12345abc" value="${esc(_settings.adzuna_app_id||'')}"></div>
+      <div class="field"><label>App Key</label><input id="keyAdzunaKey" type="password" placeholder="paste key" value="${esc(_settings.adzuna_app_key||'')}"></div>
+    </div>
+    <div style="padding:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;margin-bottom:16px">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:6px">JSearch via RapidAPI <span style="font-size:11px;background:rgba(255,255,255,.08);padding:2px 8px;border-radius:6px;color:rgba(255,255,255,.6);margin-left:6px;font-weight:500">Free tier · ~200 calls/mo</span></h3>
+      <p style="color:rgba(255,255,255,.55);font-size:13px;margin-bottom:12px">Register at <a href="https://rapidapi.com/letscrape-6bRBa3QguO5/api/jsearch" target="_blank" style="color:#a78bfa">rapidapi.com/jsearch</a>. Subscribe to the Basic (free) plan. Aggregates Indeed, LinkedIn, Glassdoor, ZipRecruiter.</p>
+      <div class="field"><label>RapidAPI Key</label><input id="keyRapidApi" type="password" placeholder="paste X-RapidAPI-Key" value="${esc(_settings.rapidapi_key||'')}"></div>
+    </div>`;
+  }
   $('setKeywords').value=(_settings.keywords||[]).join(', ');
   $('setLoc').value=_settings.location_pref||'';
 }
@@ -669,9 +698,13 @@ function toggleSrc(id){const s=new Set(_settings.job_sources||[]);s.has(id)?s.de
 async function saveSettings(){
   _settings.keywords=$('setKeywords').value.split(',').map(s=>s.trim()).filter(Boolean);
   _settings.location_pref=$('setLoc').value.trim();
-  const payload={user_id:user.id,industries:_settings.industries,keywords:_settings.keywords,job_sources:_settings.job_sources,location_pref:_settings.location_pref,updated_at:new Date().toISOString()};
+  if($('keyAdzunaId'))_settings.adzuna_app_id=$('keyAdzunaId').value.trim();
+  if($('keyAdzunaKey'))_settings.adzuna_app_key=$('keyAdzunaKey').value.trim();
+  if($('keyRapidApi'))_settings.rapidapi_key=$('keyRapidApi').value.trim();
+  const payload={user_id:user.id,industries:_settings.industries,keywords:_settings.keywords,job_sources:_settings.job_sources,location_pref:_settings.location_pref,adzuna_app_id:_settings.adzuna_app_id||null,adzuna_app_key:_settings.adzuna_app_key||null,rapidapi_key:_settings.rapidapi_key||null,updated_at:new Date().toISOString()};
   const{error}=await sb.from('user_settings').upsert(payload,{onConflict:'user_id'});
   $('setStatus').textContent=error?'Error: '+error.message:'Saved ✓';
+  renderSettings();
   setTimeout(()=>{$('setStatus').textContent=''},3000);
 }
 
@@ -689,16 +722,56 @@ async function fetchRemoteOK(){
 async function fetchJobicy(){
   try{const r=await fetch('https://jobicy.com/api/v2/remote-jobs?count=50');const d=await r.json();return(d.jobs||[]).map(j=>({id:'jobicy:'+j.id,source:'Jobicy',title:j.jobTitle,company:j.companyName,location:j.jobGeo||'Remote',description:(j.jobDescription||'').replace(/<[^>]*>/g,'').slice(0,2000),tags:j.jobIndustry||[],url:j.url,type:(j.jobType||[]).join(','),category:(j.jobIndustry||[])[0]||'',posted:j.pubDate,external_id:String(j.id)}))}catch(e){return[]}
 }
+async function fetchTheMuse(){
+  try{
+    // The Muse API — public, CORS-enabled. Pull 3 pages for broader coverage.
+    const results=await Promise.all([0,1,2].map(p=>fetch(`https://www.themuse.com/api/public/jobs?page=${p}&descending=true`).then(r=>r.json()).catch(()=>({results:[]}))));
+    const all=[].concat(...results.map(d=>d.results||[]));
+    return all.slice(0,80).map(j=>({
+      id:'muse:'+j.id,
+      source:'The Muse',
+      title:j.name,
+      company:j.company?.name||'',
+      location:(j.locations||[]).map(l=>l.name).join(', ')||'Flexible',
+      description:(j.contents||'').replace(/<[^>]*>/g,'').slice(0,2000),
+      tags:(j.categories||[]).map(c=>c.name),
+      url:j.refs?.landing_page||'',
+      type:(j.levels||[]).map(l=>l.name).join(',')||'full-time',
+      category:(j.categories||[])[0]?.name||'',
+      posted:j.publication_date,
+      external_id:String(j.id)
+    }));
+  }catch(e){return[]}
+}
+async function fetchAdzuna(){
+  if(!_settings.adzuna_app_id||!_settings.adzuna_app_key)return[];
+  try{
+    const url=`https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=${encodeURIComponent(_settings.adzuna_app_id)}&app_key=${encodeURIComponent(_settings.adzuna_app_key)}&results_per_page=50&content-type=application/json`;
+    const r=await fetch(url);const d=await r.json();
+    return(d.results||[]).map(j=>({id:'adzuna:'+j.id,source:'Adzuna',title:j.title,company:j.company?.display_name||'',location:j.location?.display_name||'',description:(j.description||'').slice(0,2000),tags:[j.category?.label].filter(Boolean),url:j.redirect_url,type:j.contract_type||'full-time',category:j.category?.label||'',posted:j.created,external_id:String(j.id)}));
+  }catch(e){console.warn('Adzuna failed',e);return[]}
+}
+async function fetchJSearch(){
+  if(!_settings.rapidapi_key)return[];
+  try{
+    const r=await fetch('https://jsearch.p.rapidapi.com/search?query=developer&num_pages=1',{headers:{'X-RapidAPI-Key':_settings.rapidapi_key,'X-RapidAPI-Host':'jsearch.p.rapidapi.com'}});
+    const d=await r.json();
+    return(d.data||[]).map(j=>({id:'jsearch:'+j.job_id,source:j.job_publisher||'JSearch',title:j.job_title,company:j.employer_name||'',location:[j.job_city,j.job_state,j.job_country].filter(Boolean).join(', ')||'Remote',description:(j.job_description||'').slice(0,2000),tags:j.job_required_skills||[],url:j.job_apply_link,type:j.job_employment_type||'full-time',category:'',posted:j.job_posted_at_datetime_utc,external_id:j.job_id}));
+  }catch(e){console.warn('JSearch failed',e);return[]}
+}
 
 async function syncJobs(){
   const st=$('discStatus');st.textContent='Fetching from sources...';
   await loadSettings();
-  const srcs=_settings.job_sources?.length?_settings.job_sources:['remotive','arbeitnow','remoteok','jobicy'];
-  const tasks=[];
-  if(srcs.includes('remotive'))tasks.push(fetchRemotive());
-  if(srcs.includes('arbeitnow'))tasks.push(fetchArbeitnow());
-  if(srcs.includes('remoteok'))tasks.push(fetchRemoteOK());
-  if(srcs.includes('jobicy'))tasks.push(fetchJobicy());
+  const srcs=_settings.job_sources?.length?_settings.job_sources:['remotive','arbeitnow','remoteok','jobicy','themuse'];
+  const enabledList=[];const tasks=[];
+  if(srcs.includes('remotive')){tasks.push(fetchRemotive());enabledList.push('remotive')}
+  if(srcs.includes('arbeitnow')){tasks.push(fetchArbeitnow());enabledList.push('arbeitnow')}
+  if(srcs.includes('remoteok')){tasks.push(fetchRemoteOK());enabledList.push('remoteok')}
+  if(srcs.includes('jobicy')){tasks.push(fetchJobicy());enabledList.push('jobicy')}
+  if(srcs.includes('themuse')){tasks.push(fetchTheMuse());enabledList.push('themuse')}
+  if(srcs.includes('adzuna')&&_settings.adzuna_app_id&&_settings.adzuna_app_key){tasks.push(fetchAdzuna());enabledList.push('adzuna')}
+  if(srcs.includes('jsearch')&&_settings.rapidapi_key){tasks.push(fetchJSearch());enabledList.push('jsearch')}
   const results=await Promise.all(tasks);
   let merged=[].concat(...results);
   // De-dupe by title+company
@@ -718,7 +791,7 @@ async function syncJobs(){
     });
   }
   _feed=merged;
-  const srcCounts=results.map((r,i)=>`${['remotive','arbeitnow','remoteok','jobicy'].filter(s=>srcs.includes(s))[i]}:${r.length}`).join(' · ');
+  const srcCounts=results.map((r,i)=>`${enabledList[i]}:${r.length}`).join(' · ');
   st.innerHTML=`Loaded <b>${_feed.length}</b> jobs after filtering · sources: ${srcCounts} · ${new Date().toLocaleTimeString()}`;
   renderFeed();
 }
