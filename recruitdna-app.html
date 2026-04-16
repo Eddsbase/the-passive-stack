@@ -86,25 +86,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sa
 <body>
 <div class="bg-glow"></div>
 
-<!-- AUTH -->
-<div id="auth" class="auth-wrap">
-  <div class="auth-card">
-    <div class="auth-logo">RecruitDNA</div>
-    <div class="auth-sub" id="authSub">Sign in to your workspace</div>
-    <div id="authErr" class="err hidden"></div>
-    <div id="authOk" class="ok hidden"></div>
-    <div class="field"><label>Email</label><input id="authEmail" type="email" placeholder="you@company.com"></div>
-    <div class="field"><label>Password</label><input id="authPwd" type="password" placeholder="••••••••"></div>
-    <button class="btn btn-primary" id="authBtn">Sign in</button>
-    <div class="switch">
-      <span id="authSwitchText">Don't have an account?</span>
-      <a id="authSwitch">Sign up</a>
-    </div>
-  </div>
-</div>
-
-<!-- APP -->
-<div id="app" class="app">
+<!-- APP (auth removed — opens directly) -->
+<div id="app" class="app active">
   <aside class="sidebar">
     <div class="logo">RecruitDNA</div>
     <div class="nav-item active" data-view="dashboard"><span class="ico">◈</span>Dashboard</div>
@@ -117,8 +100,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sa
     <div class="nav-item" data-view="workflows"><span class="ico">⚙</span>Workflows</div>
     <div class="nav-item" data-view="settings"><span class="ico">✎</span>Settings</div>
     <div class="user">
-      <div class="email" id="userEmail"></div>
-      <button class="btn btn-ghost btn-sm" id="signOut" style="width:100%">Sign out</button>
+      <div class="email" id="userEmail" style="color:#86efac">Demo workspace</div>
     </div>
   </aside>
 
@@ -342,62 +324,18 @@ Skills: Figma, Design Systems, User Research, Prototyping, Sketch..."></textarea
 const SUPABASE_URL='https://jetpyyyypyixszfvrnle.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpldHB5eXl5cHlpeHN6ZnZybmxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMzEyMzUsImV4cCI6MjA5MTYwNzIzNX0.0IPrSOtN2BWJLYkJuuenktwvIyfn05bSvUgwvMeyAgY';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let user=null,mode='signin',candidates=[],jobs=[];
+// Auth removed — single shared demo workspace
+const DEMO_USER_ID='00000000-0000-0000-0000-000000000001';
+let user={id:DEMO_USER_ID,email:'demo@recruitdna.local'},candidates=[],jobs=[];
 const STAGES=['new','screening','interview','offer','hired','rejected'];
-
-// AUTH
 const $=id=>document.getElementById(id);
-const show=(el,ok,msg)=>{el.textContent=msg;el.classList.remove('hidden')};
-const hide=el=>el.classList.add('hidden');
 
-function setMode(m){
-  mode=m;
-  $('authBtn').textContent=m==='signin'?'Sign in':'Create account';
-  $('authSub').textContent=m==='signin'?'Sign in to your workspace':'Create your workspace';
-  $('authSwitchText').textContent=m==='signin'?"Don't have an account?":'Already have an account?';
-  $('authSwitch').textContent=m==='signin'?'Sign up':'Sign in';
-}
-$('authSwitch').onclick=()=>setMode(mode==='signin'?'signup':'signin');
-
-$('authBtn').onclick=async()=>{
-  hide($('authErr'));hide($('authOk'));
-  const email=$('authEmail').value.trim(),pwd=$('authPwd').value;
-  if(!email||!pwd){return show($('authErr'),0,'Email and password required')}
-  $('authBtn').disabled=true;$('authBtn').textContent='Please wait...';
-  try{
-    const fn=mode==='signin'?'signInWithPassword':'signUp';
-    const{data,error}=await sb.auth[fn]({email,password:pwd});
-    if(error)throw error;
-    if(mode==='signup'&&!data.session){show($('authOk'),1,'Check your email to confirm your account.');}
-    else if(data.session){await initApp();}
-  }catch(e){show($('authErr'),0,e.message)}
-  finally{$('authBtn').disabled=false;$('authBtn').textContent=mode==='signin'?'Sign in':'Create account';}
-};
-
-// URL ?signup=1
-if(new URLSearchParams(location.search).get('signup'))setMode('signup');
-
-// SESSION
+// Boot directly — no auth gate
 (async()=>{
-  const{data}=await sb.auth.getSession();
-  if(data.session){await initApp();}
-})();
-
-async function initApp(){
-  const{data}=await sb.auth.getUser();
-  user=data.user;
-  $('userEmail').textContent=user.email;
-  $('auth').style.display='none';
-  $('app').classList.add('active');
   await loadData();
   await loadSettings();
   renderAll();
-}
-
-$('signOut').onclick=async()=>{
-  await sb.auth.signOut();
-  location.reload();
-};
+})();
 
 // NAV
 document.querySelectorAll('.nav-item').forEach(n=>{
@@ -522,10 +460,9 @@ async function saveJob(){
 
 // AI EDGE FUNCTION HELPER
 async function callAgent(name,body){
-  const{data:{session}}=await sb.auth.getSession();
   const r=await fetch(`${SUPABASE_URL}/functions/v1/${name}`,{
     method:'POST',
-    headers:{'Authorization':`Bearer ${session.access_token}`,'apikey':SUPABASE_KEY,'Content-Type':'application/json'},
+    headers:{'Authorization':`Bearer ${SUPABASE_KEY}`,'apikey':SUPABASE_KEY,'Content-Type':'application/json'},
     body:JSON.stringify(body)
   });
   const d=await r.json();
@@ -655,8 +592,7 @@ const SOURCES=[
   {id:'jobicy',name:'Jobicy',desc:'Remote, all sectors',free:true},
   {id:'themuse',name:'The Muse',desc:'US-heavy, industry categories, all sectors',free:true},
   {id:'adzuna',name:'Adzuna',desc:'Indeed + multiple (needs free key)',free:false,key:'adzuna'},
-  {id:'jsearch',name:'JSearch (RapidAPI)',desc:'Indeed + LinkedIn + Glassdoor (needs RapidAPI key)',free:false,key:'rapidapi'}
-];
+  {id:'jsearch',name:'JSearch (RapidAPI)',desc:'Indeed + LinkedIn + Glassdoor (needs RapidAPI key)',free:false,key:'rapidapi'}];
 let _settings={industries:[],keywords:[],job_sources:['remotive','arbeitnow','remoteok','jobicy','themuse'],location_pref:'',adzuna_app_id:'',adzuna_app_key:'',rapidapi_key:'',auto_personality:false};
 
 async function loadSettings(){
@@ -683,7 +619,7 @@ function renderSettings(){
   // API key inputs
   const ak=$('apiKeysBox');
   if(ak){
-    ak.innerHTML=`
+   ak.innerHTML=`
     <div style="margin-bottom:20px;padding:14px;background:rgba(234,179,8,.06);border:1px solid rgba(234,179,8,.2);border-radius:10px;font-size:13px;color:#fde68a"><b>Keyed sources are disabled by default.</b> Paste keys below to unlock Indeed + LinkedIn + Glassdoor coverage. Stored in Supabase, never sent to the browser from anywhere else.</div>
     <div style="padding:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;margin-bottom:16px">
       <h3 style="font-size:15px;font-weight:700;margin-bottom:6px">Adzuna <span style="font-size:11px;background:rgba(255,255,255,.08);padding:2px 8px;border-radius:6px;color:rgba(255,255,255,.6);margin-left:6px;font-weight:500">Free tier · 1000 calls/mo</span></h3>
